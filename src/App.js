@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import './App.css';
-import logo from './smashatl.png';
-import logo2 from './smashatl2.png';
-import logo3 from './logo2.gif';
-import fb from './fb.png';
-import twit from './twit.png';
+import './CSS/App.css';
+import logo from './Media/smashatl.png';
+import logo2 from './Media/smashatl2.png';
+import logo3 from './Media/logo2.gif';
+import fb from './Media/fb.png';
+import twit from './Media/twit.png';
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import {
@@ -16,11 +16,11 @@ import {
   Redirect,
   BrowserRouter
 } from "react-router-dom";
-import home from './home';
-import events from './events';
-import smashmap from './smashmap';
-import account from './account';
-import faq from './faq';
+import home from './Components/Home/home';
+import events from './Components/Events/events';
+import smashmap from './Components/SmashMap/smashmap';
+import account from './Components/Account/account';
+import faq from './Components/Faq/faq';
 
 const App = () => (
 
