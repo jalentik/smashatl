@@ -1,3 +1,12 @@
+## 1.1
+Set-up file structure
+
+## 1.0
+
+Set up the Nav bar, and Mock Content for the Smash Map 
+
+## Documentation
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>

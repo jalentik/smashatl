@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import gamap from './gamap.png';
+import gamap from '../../Media/gamap.png';
 class home extends Component {
     render() {
         return (
