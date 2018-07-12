@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import filterOptions from "./filterOptions";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
+
 var search = require('../../Media/search.png')
 var chevron = require('../../Media/chevron.png')
 
@@ -14,12 +19,16 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>
 ))
 
 class smashmap extends Component {
+
     constructor(props) {
         super(props);
-        this.state = { chkPlayers: false, chkEvents: false }
+
+        this.state = { chkPlayers: false, chkEvents: false, selectedChars:null, selectedPlaystyle:null, selectedRadius:10 }
         this.togglePlayersFilter = this.togglePlayersFilter.bind(this);
         this.toggleEventsFilter = this.toggleEventsFilter.bind(this);
+        this.charFilterChange = this.charFilterChange.bind(this);
 
+        this.characters = filterOptions.characters;
     }
 
     togglePlayersFilter() {
@@ -32,7 +41,33 @@ class smashmap extends Component {
         this.setState({ chkEvents: !ev })
     }
 
+    charFilterChange(selectedChars){
+        this.setState({ selectedChars });
+        // selectedOption can be null when the `x` (close) button is clicked
+        if (selectedChars) {
+          console.log(selectedChars);
+        }
+    }
+
+    playFilterChange(selectedPlaystyle){
+        this.setState({ selectedPlaystyle });
+        if (selectedPlaystyle) {
+            console.log(selectedPlaystyle);
+          }
+    }
+
+    radiusFilterChange(selectedRadius){
+        this.setState({ selectedRadius });
+        if (selectedRadius) {
+            console.log(selectedRadius);
+          }
+    }
+
     render() {
+        const selectedChars = this.state.selectedChars;
+        const selectedPlaystyle = this.state.selectedPlaystyle;
+        const selectedRadius = this.state.selectedRadius;
+
         return (
             <div className="content-smashmap">
 
@@ -48,15 +83,48 @@ class smashmap extends Component {
                             Players
                             <img src={chevron} className={this.state.chkPlayers ? 'filter-chevron-active' : 'filter-chevron'} />
                         </a>
-                        <div className={this.state.chkPlayers ? 'filter-options-items-wrapper-shown' : 'filter-options-items-wrapper'}  >
-                            <div className={this.state.chkPlayers ? 'filter-options-item-shown' : 'filter-options-item'}>
-                            Characters 
+                        <div id="select-filter-wrapper" className={this.state.chkPlayers ? 'filter-options-items-wrapper-shown' : 'filter-options-items-wrapper'}  >
+                            <div  className={this.state.chkPlayers ? '.select-wrapper filter-options-item-shown' : 'filter-options-item'}>
+                                <Select
+                                    className="character-select"
+                                    name="character-select"
+                                    placeholder="Characters"
+                                    closeOnSelect={false}
+                                    onChange={this.charFilterChange}
+                                    options={filterOptions.characters}
+                                    labelKey={"charName"}
+                                    valueKey={"charId"}
+                                    multi
+                                    removeSelected
+                                    value={selectedChars}
+                                />
                             </div>
-                            <div className={this.state.chkPlayers ? 'filter-options-item-shown' : 'filter-options-item'}>
-                            Activity
+
+                            <div className={this.state.chkPlayers ? '.select-wrapper filter-options-item-shown' : 'filter-options-item'}>
+                            <Select
+                                    className="playstyle-select"
+                                    name="playstyle-select"
+                                    placeholder="Playstyle"
+                                    closeOnSelect={false}
+                                    onChange={this.playFilterChange}
+                                    options={filterOptions.playstyle}
+                                    labelKey={"styleName"}
+                                    valueKey={"playId"}
+                                    multi
+                                    removeSelected
+                                    value={selectedPlaystyle}
+                                />
                             </div>
-                            <div className={this.state.chkPlayers ? 'filter-options-item-shown' : 'filter-options-item'}>
-                            Rank
+                            <div className={this.state.chkPlayers ? '.select-wrapper filter-options-item-shown' : 'filter-options-item'}>
+                            <Select
+                                    className="radius-select"
+                                    name="radius-select"
+                                    placeholder=""
+                                    onChange={this.radiusFilterChange}
+                                    options={filterOptions.radius}
+                                    simpleValue
+                                    value={selectedRadius}
+                                />
                             </div>
                         </div>
 
@@ -68,13 +136,13 @@ class smashmap extends Component {
                         </a>
                         <div className={this.state.chkEvents ? 'filter-options-items-wrapper-shown' : 'filter-options-items-wrapper'}  >
                             <div className={this.state.chkEvents ? 'filter-options-item-shown' : 'filter-options-item'}>
-                            Characters
+                                Characters
                             </div>
                             <div className={this.state.chkEvents ? 'filter-options-item-shown' : 'filter-options-item'}>
-                            Activity
+                                Activity
                             </div>
                             <div className={this.state.chkEvents ? 'filter-options-item-shown' : 'filter-options-item'}>
-                            Rank
+                                Rank
                             </div>
                         </div>
                     </div>

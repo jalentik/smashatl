@@ -1,3 +1,24 @@
+.character-select{
+  flex:1;
+  font-family: 'Quicksand', sans-serif;
+  font-weight:300;
+  color: #7e7d7d;
+  font-size: 15px;
+  }
+
+.select-filter-wrapper{
+  display:flex;
+  flex:1;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.select-wrapper{
+  display:flex;
+  flex:1;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin:0px 10px 0px 10px;
+}
 .filter-options-item-shown{
   -webkit-transition: all 0.70s ease-in-out;
   -moz-transition: all 0.70s ease-in-out;
@@ -17,7 +38,7 @@
   -moz-transition: all 0.30s ease-in-out;
   -ms-transition: all 0.30s ease-in-out;
   -o-transition: all 0.30s ease-in-out;
-  max-height: 200;
+  height: 50%;
 }
 
 .filter-options-items-wrapper{
@@ -65,8 +86,10 @@
   -o-transition: all 0.30s ease-in-out;
 }
 .map-search{
-  font-size: 30px;
-}
+  font-family: 'Quicksand', sans-serif;
+  font-weight:300;
+  color: #7e7d7d;
+  font-size: 30px;}
 
 .filter-players > a > p, .filter-events > a > p{
  
