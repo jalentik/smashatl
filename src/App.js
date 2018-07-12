@@ -24,7 +24,7 @@ const App = () => (
   <BrowserRouter>
     <Route
       render={({ location }) => (
-        <div className="app" >
+        <div id="app" className="app" >
                   <div className="header" ref='header'>
                     <div className="header-left">
                       <div className="nav-container">
@@ -69,7 +69,7 @@ const App = () => (
                   </div>
 
             <div className="content">
-              <div className="content-side"></div>
+              
               <div className="content-main" >
                 <TransitionGroup>
                   <CSSTransition in key={location.key} classNames="page-transition" timeout={500}>
@@ -87,7 +87,6 @@ const App = () => (
                   </CSSTransition>
                 </TransitionGroup>
               </div>
-              <div className="content-side"></div>
 
             </div>
         </div>
