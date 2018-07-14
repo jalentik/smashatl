@@ -1,0 +1,51 @@
+
+.left-bar{
+    display: flex;
+}
+.ul-directory{
+    width:100%;
+    display: flex;
+    height:100%;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+div.left-bar ul.ul-directory li.showing{
+    color: #000000;
+}
+
+div.left-bar ul.ul-directory li:hover {
+    transition: all 1.0s ease in;
+    color: #000000;
+}
+div.left-bar ul.ul-directory li{
+    color:#dddddd;
+    transition: all 0.5s ease in;
+    font-family: 'Delius', cursive;
+    font-weight:500;
+    font-size:30px;
+    list-style-type: none;
+    cursor:pointer;
+    flex: 1;
+    padding-top: 25px;
+}
+.faq-content{
+    flex:1;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+}
+
+.main-content{
+    width: 500px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    padding-left:100px;
+}
+
+.answer-content p{
+    font-family: 'Quicksand', sans-serif;
+    font-weight:500;
+    font-size: 35px;
+}

@@ -5,6 +5,7 @@ import logo2 from './Media/smashatl2.png';
 import logo3 from './Media/logo2.gif';
 import fb from './Media/fb.png';
 import twit from './Media/twit.png';
+import twtch from './Media/twitch.png';
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import {
   Route,
@@ -63,6 +64,7 @@ const App = () => (
                         <div style={{ display: 'flex', flexDirection: 'row', maxHeight: '50px', paddingTop: '10px' }}>
                           <img src={fb} className='social-image' />
                           <img src={twit} className='social-image' />
+                          <img src={twtch } className='social-image' />
                         </div>
                       </div>
                     </div>

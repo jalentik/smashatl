@@ -1,4 +1,10 @@
 export default {
+    playstyle:[
+        {playId: 0, playName:"Beginner", blank:""},
+        {playId: 1, playName:"Casual", blank:""},
+        {playId: 2, playName:"Competitive", blank:""},
+        {playId: 3, playName:"Experimental", blank:""}
+    ],
     characters:[
         {charId:0, charName: "Bayonetta", thumbnail:""},
         {charId:1, charName: "Bowser", thumbnail:""},
@@ -72,19 +78,31 @@ export default {
 
         
     ],
-    playstyle:[
-        {value: 0, label:"Beginner"},
-        {value: 1, label:"Casual"},
-        {value: 2, label:"Competitive"},
-        {value: 3, label:"Experimental"}
-    ],
+
     radius:[
-        {value: 0, label: "10"},
-        {value: 1, label: "20"},
-        {value: 2, label: "30"},
-        {value: 3, label: "40"},
-        {value: 4, label: "50"},
-    ]
+        {value: 0, label: "10 Miles"},
+        {value: 1, label: "20 Miles"},
+        {value: 2, label: "30 Miles"},
+        {value: 3, label: "40 Miles"},
+        {value: 4, label: "50 Miles"},
+    ],
+    venueFee:[
+        {value:0, label: "Yes"},
+        {value:1, label: "No"}
+
+    ],
+    potBonus:[
+        {value:0, label: "Yes"},
+        {value:1, label: "No"}
+
+    ],
+    onlineSignup:[
+        {value:0, label: "Yes"},
+        {value:1, label: "No"}
+
+    ],
+
+    
 
     
 }

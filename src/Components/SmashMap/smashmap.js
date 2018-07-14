@@ -23,12 +23,26 @@ class smashmap extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { chkPlayers: false, chkEvents: false, selectedChars:null, selectedPlaystyle:null, selectedRadius:10 }
+        this.state = { chkPlayers: false, chkEvents: false, selectedChars: "", selectedPlaystyle: "", selectedRadius: "",
+        selectedVenueFee: "", selectedPotBonus: "", selectedOnlineSignup: ""  }
         this.togglePlayersFilter = this.togglePlayersFilter.bind(this);
         this.toggleEventsFilter = this.toggleEventsFilter.bind(this);
+
         this.charFilterChange = this.charFilterChange.bind(this);
+        this.playFilterChange = this.playFilterChange.bind(this);
+        this.radiusFilterChange = this.radiusFilterChange.bind(this);
+
+        this.venueFeeFilterChange = this.venueFeeFilterChange.bind(this);
+        this.potBonusFilterChange = this.potBonusFilterChange.bind(this);
+        this.OnlineSignupFilterChange = this.OnlineSignupFilterChange.bind(this);
 
         this.characters = filterOptions.characters;
+        this.playstyles = filterOptions.playstyle;
+        this.radius = filterOptions.radius;
+
+        this.venueFee = filterOptions.venueFee;
+        this.potBonus = filterOptions.potBonus;
+        this.onlineSignup = filterOptions.onlineSignup;
     }
 
     togglePlayersFilter() {
@@ -41,32 +55,60 @@ class smashmap extends Component {
         this.setState({ chkEvents: !ev })
     }
 
-    charFilterChange(selectedChars){
+    charFilterChange(selectedChars) {
         this.setState({ selectedChars });
         // selectedOption can be null when the `x` (close) button is clicked
         if (selectedChars) {
-          console.log(selectedChars);
+            console.log(selectedChars);
+
         }
     }
 
-    playFilterChange(selectedPlaystyle){
+    playFilterChange(selectedPlaystyle) {
         this.setState({ selectedPlaystyle });
         if (selectedPlaystyle) {
-            console.log(selectedPlaystyle);
-          }
+            console.log(this.state.selectedPlaystyle);
+        }
     }
 
-    radiusFilterChange(selectedRadius){
+    radiusFilterChange(selectedRadius) {
         this.setState({ selectedRadius });
         if (selectedRadius) {
             console.log(selectedRadius);
-          }
+        }
+    }
+
+    venueFeeFilterChange(selectedVenueFee) {
+        this.setState({ selectedVenueFee });
+        // selectedOption can be null when the `x` (close) button is clicked
+        if (selectedVenueFee) {
+            console.log(selectedVenueFee);
+
+        }
+    }
+
+    potBonusFilterChange(selectedPotBonus) {
+        this.setState({ selectedPotBonus });
+        if (selectedPotBonus) {
+            console.log(this.state.selectedPotBonus);
+        }
+    }
+
+    OnlineSignupFilterChange(selectedOnlineSignup) {
+        this.setState({ selectedOnlineSignup });
+        if (selectedOnlineSignup) {
+            console.log(selectedOnlineSignup);
+        }
     }
 
     render() {
         const selectedChars = this.state.selectedChars;
         const selectedPlaystyle = this.state.selectedPlaystyle;
         const selectedRadius = this.state.selectedRadius;
+
+        const selectedVenueFee = this.state.selectedVenueFee;
+        const selectedPotBonus = this.state.selectedPotBonus;
+        const selectedOnlineSignup = this.state.selectedOnlineSignup;
 
         return (
             <div className="content-smashmap">
@@ -79,70 +121,101 @@ class smashmap extends Component {
                         <input className="map-search" type="text" placeholder="e.g. Woodstock" />
                     </div>
                     <div className="filter-players">
-                        <a href="#" onClick={this.togglePlayersFilter}>
+                        <div className="players-filter-toggle" onClick={this.togglePlayersFilter}>
                             Players
                             <img src={chevron} className={this.state.chkPlayers ? 'filter-chevron-active' : 'filter-chevron'} />
-                        </a>
-                        <div id="select-filter-wrapper" className={this.state.chkPlayers ? 'filter-options-items-wrapper-shown' : 'filter-options-items-wrapper'}  >
-                            <div  className={this.state.chkPlayers ? '.select-wrapper filter-options-item-shown' : 'filter-options-item'}>
+                        </div>
+                        <div className={this.state.chkPlayers ? 'filter-options-items-wrapper-shown' : 'filter-options-items-wrapper'}  >
+                            <div className={this.state.chkPlayers ? 'filter-options-item-shown' : 'filter-options-item'}>
+
                                 <Select
                                     className="character-select"
-                                    name="character-select"
                                     placeholder="Characters"
                                     closeOnSelect={false}
                                     onChange={this.charFilterChange}
-                                    options={filterOptions.characters}
+                                    options={this.characters}
                                     labelKey={"charName"}
                                     valueKey={"charId"}
-                                    multi
-                                    removeSelected
+                                    multi={true}
+                                    removeSelected={true}
                                     value={selectedChars}
                                 />
                             </div>
+                            <div className={this.state.chkPlayers ? 'filter-options-item-shown' : 'filter-options-item'}>
 
-                            <div className={this.state.chkPlayers ? '.select-wrapper filter-options-item-shown' : 'filter-options-item'}>
-                            <Select
+                                <Select
                                     className="playstyle-select"
-                                    name="playstyle-select"
                                     placeholder="Playstyle"
                                     closeOnSelect={false}
                                     onChange={this.playFilterChange}
-                                    options={filterOptions.playstyle}
-                                    labelKey={"styleName"}
+                                    options={this.playstyles}
+                                    labelKey={"playName"}
                                     valueKey={"playId"}
-                                    multi
-                                    removeSelected
+                                    multi={true}
+                                    removeSelected={true}
                                     value={selectedPlaystyle}
                                 />
                             </div>
-                            <div className={this.state.chkPlayers ? '.select-wrapper filter-options-item-shown' : 'filter-options-item'}>
-                            <Select
+                            <div className={this.state.chkPlayers ? 'filter-options-item-shown' : 'filter-options-item'}>
+
+                                <Select
                                     className="radius-select"
-                                    name="radius-select"
-                                    placeholder=""
+                                    placeholder="Radius (Miles)"
                                     onChange={this.radiusFilterChange}
-                                    options={filterOptions.radius}
-                                    simpleValue
+                                    options={this.radius}
                                     value={selectedRadius}
+                                    labelKey={"label"}
+                                    valueKey={"value"}
                                 />
+                            </div>
+                            <div id='more-filters-box' className={this.state.chkPlayers ? 'filter-options-item-shown' : 'filter-options-item'}>
+                                <div className="more-filters">
+                                    More Filters
+                                </div>
                             </div>
                         </div>
 
                     </div>
                     <div className="filter-events">
-                        <a href="#" onClick={this.toggleEventsFilter}>
+                        <div className="events-filter-toggle" onClick={this.toggleEventsFilter}>
                             Events
                             <img src={chevron} className={this.state.chkEvents ? 'filter-chevron-active' : 'filter-chevron'} />
-                        </a>
+                        </div>
                         <div className={this.state.chkEvents ? 'filter-options-items-wrapper-shown' : 'filter-options-items-wrapper'}  >
                             <div className={this.state.chkEvents ? 'filter-options-item-shown' : 'filter-options-item'}>
-                                Characters
+                                <Select
+                                    className="venuefee-select"
+                                    placeholder="Venue Fee?"
+                                    onChange={this.venueFeeFilterChange}
+                                    options={this.venueFee}
+                                    value={selectedVenueFee}
+                                />
                             </div>
                             <div className={this.state.chkEvents ? 'filter-options-item-shown' : 'filter-options-item'}>
-                                Activity
+                                <Select
+                                    className="potbonus-select"
+                                    placeholder="Pot Bonus?"
+                                    onChange={this.potBonusFilterChange}
+                                    options={this.potBonus}
+                                    value={selectedPotBonus}
+                                />                            
                             </div>
                             <div className={this.state.chkEvents ? 'filter-options-item-shown' : 'filter-options-item'}>
-                                Rank
+
+
+                                <Select
+                                    className="onlinesignup-select"
+                                    placeholder="Online Signup?"
+                                    onChange={this.OnlineSignupFilterChange}
+                                    options={this.onlineSignup}
+                                    value={selectedOnlineSignup}
+                                />
+                            </div>
+                            <div className={this.state.chkEvents ? 'filter-options-item-shown' : 'filter-options-item'}>
+
+                                <div className="more-filters">
+                                    More Filters
+                                </div>
                             </div>
                         </div>
                     </div>
