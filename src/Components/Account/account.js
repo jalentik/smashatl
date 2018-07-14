@@ -1,10 +1,68 @@
 import React, { Component } from "react";
-class account extends Component {
+import "./account.css"
+class LoginForm extends Component {
     render() {
         return (
-            <div >
-                TODO
+            <div className="login-form">
+
+            </div>
+        )
+    }
+}
+class SignupForm extends Component {
+    render() {
+        return (
+            <div className="signup-form">
+                <div className="signup-form-left">
+                    <input type="text" placeholder="Username" />
+                    <input type="text" placeholder="Password" />
+                    <input type="text" placeholder="Confirm Password" />
+                    <input type="text" placeholder="E-Mail Address" />
                 </div>
+                <div className="signup-form-right">
+                    <h1>Welcome</h1>
+                    <h2> With every new user, we get closer to our goal of becoming the #1 platform for the smash community in our lovely state of GA. Thank you, and we look forward to growing with you as individuals and as a community.</h2>
+                    <div className="btn-wrapper">
+                        <div className="btn">JOIN</div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
+class account extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { tab: "login" };
+        this.tabChange = this.tabChange.bind(this);
+    }
+    tabChange(tab) {
+        this.setState({ tab })
+    }
+    render() {
+        const tab = this.state.tab;
+        return (
+            <div className="account-content">
+                <div className="header-tabs-container">
+                    <div className={tab == "login" ? "header-tab-active" : "header-tab"} onClick={() => this.tabChange("login")}>
+                        Log In
+                    </div>
+                    <div className={tab == "signup" ? "header-tab-active" : "header-tab"} onClick={() => this.tabChange("signup")}>
+                        Sign Up
+                    </div>
+                </div>
+
+                <div className="content-container">
+                    <div className={tab == "login" ? "loginForm-container" : "loginForm-container-hidden"}>
+                        <LoginForm />
+                    </div>
+
+                    <div className={tab == "signup" ? "signupForm-container" : "signupForm-container-hidden"}>
+                        <SignupForm />
+                    </div>
+                </div>
+
+            </div>
         )
     }
 }
