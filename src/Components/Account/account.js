@@ -1,10 +1,15 @@
 import React, { Component } from "react";
 import "./account.css"
+import gc from '../../Media/gc.png'
 class LoginForm extends Component {
     render() {
         return (
             <div className="login-form">
-
+                <input type="text" placeholder="Username" />
+                <input type="password" placeholder="Password" />
+                <div className="btn-wrapper">
+                    <div className="btn">GO</div>
+                </div>
             </div>
         )
     }
@@ -15,8 +20,8 @@ class SignupForm extends Component {
             <div className="signup-form">
                 <div className="signup-form-left">
                     <input type="text" placeholder="Username" />
-                    <input type="text" placeholder="Password" />
-                    <input type="text" placeholder="Confirm Password" />
+                    <input type="password" placeholder="Password" />
+                    <input type="password" placeholder="Confirm Password" />
                     <input type="text" placeholder="E-Mail Address" />
                 </div>
                 <div className="signup-form-right">
@@ -62,6 +67,10 @@ class account extends Component {
                     </div>
                 </div>
 
+                <div className="account-footer">
+                    Powered by Smash ATL
+                <img src={gc} />
+                </div>
             </div>
         )
     }

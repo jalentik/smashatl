@@ -394,7 +394,7 @@ flex-direction: row;
  top:0px;
 }
 
-input[type=text], textarea {
+input[type=text], input[type=password], textarea {
   -webkit-transition: all 0.30s ease-in-out;
   -moz-transition: all 0.30s ease-in-out;
   -ms-transition: all 0.30s ease-in-out;
@@ -408,7 +408,7 @@ input[type=text], textarea {
   border-bottom: 1px solid rgb(207, 207, 207);
 }
  
-input[type=text]:focus, textarea:focus {
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
   box-shadow: 0 0 5px rgba(81, 203, 238, 1);
   padding: 3px 0px 3px 3px;
   margin: 5px 1px 3px 0px;
