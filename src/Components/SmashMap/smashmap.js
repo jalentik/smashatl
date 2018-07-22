@@ -24,7 +24,7 @@ class smashmap extends Component {
         super(props);
 
         this.state = { chkPlayers: false, chkEvents: false, selectedChars: "", selectedPlaystyle: "", selectedRadius: "",
-        selectedVenueFee: "", selectedPotBonus: "", selectedOnlineSignup: ""  }
+        selectedEvents: false }
         this.togglePlayersFilter = this.togglePlayersFilter.bind(this);
         this.toggleEventsFilter = this.toggleEventsFilter.bind(this);
 
@@ -78,37 +78,13 @@ class smashmap extends Component {
         }
     }
 
-    venueFeeFilterChange(selectedVenueFee) {
-        this.setState({ selectedVenueFee });
-        // selectedOption can be null when the `x` (close) button is clicked
-        if (selectedVenueFee) {
-            console.log(selectedVenueFee);
-
-        }
-    }
-
-    potBonusFilterChange(selectedPotBonus) {
-        this.setState({ selectedPotBonus });
-        if (selectedPotBonus) {
-            console.log(this.state.selectedPotBonus);
-        }
-    }
-
-    OnlineSignupFilterChange(selectedOnlineSignup) {
-        this.setState({ selectedOnlineSignup });
-        if (selectedOnlineSignup) {
-            console.log(selectedOnlineSignup);
-        }
-    }
 
     render() {
         const selectedChars = this.state.selectedChars;
         const selectedPlaystyle = this.state.selectedPlaystyle;
         const selectedRadius = this.state.selectedRadius;
 
-        const selectedVenueFee = this.state.selectedVenueFee;
-        const selectedPotBonus = this.state.selectedPotBonus;
-        const selectedOnlineSignup = this.state.selectedOnlineSignup;
+        const selectedEvents = this.state.selectedEvents;
 
         return (
             <div className="content-smashmap">
@@ -179,45 +155,9 @@ class smashmap extends Component {
                     <div className="filter-events">
                         <div className="events-filter-toggle" onClick={this.toggleEventsFilter}>
                             Events
-                            <img src={chevron} className={this.state.chkEvents ? 'filter-chevron-active' : 'filter-chevron'} />
+                            <input type="checkbox" value={selectedEvents}/>
                         </div>
-                        <div className={this.state.chkEvents ? 'filter-options-items-wrapper-shown' : 'filter-options-items-wrapper'}  >
-                            <div className={this.state.chkEvents ? 'filter-options-item-shown' : 'filter-options-item'}>
-                                <Select
-                                    className="venuefee-select"
-                                    placeholder="Venue Fee?"
-                                    onChange={this.venueFeeFilterChange}
-                                    options={this.venueFee}
-                                    value={selectedVenueFee}
-                                />
-                            </div>
-                            <div className={this.state.chkEvents ? 'filter-options-item-shown' : 'filter-options-item'}>
-                                <Select
-                                    className="potbonus-select"
-                                    placeholder="Pot Bonus?"
-                                    onChange={this.potBonusFilterChange}
-                                    options={this.potBonus}
-                                    value={selectedPotBonus}
-                                />                            
-                            </div>
-                            <div className={this.state.chkEvents ? 'filter-options-item-shown' : 'filter-options-item'}>
 
-
-                                <Select
-                                    className="onlinesignup-select"
-                                    placeholder="Online Signup?"
-                                    onChange={this.OnlineSignupFilterChange}
-                                    options={this.onlineSignup}
-                                    value={selectedOnlineSignup}
-                                />
-                            </div>
-                            <div className={this.state.chkEvents ? 'filter-options-item-shown' : 'filter-options-item'}>
-
-                                <div className="more-filters">
-                                    More Filters
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div className="googlemap">

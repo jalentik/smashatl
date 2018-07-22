@@ -86,21 +86,6 @@ export default {
         {value: 3, label: "40 Miles"},
         {value: 4, label: "50 Miles"},
     ],
-    venueFee:[
-        {value:0, label: "Yes"},
-        {value:1, label: "No"}
-
-    ],
-    potBonus:[
-        {value:0, label: "Yes"},
-        {value:1, label: "No"}
-
-    ],
-    onlineSignup:[
-        {value:0, label: "Yes"},
-        {value:1, label: "No"}
-
-    ],
 
     
 

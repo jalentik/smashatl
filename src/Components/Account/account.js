@@ -1,14 +1,27 @@
 import React, { Component } from "react";
 import "./account.css"
 import gc from '../../Media/gc.png'
+
 class LoginForm extends Component {
+    cosntructor(props){
+        super(props);
+        this.state = {error: false, inProgress: false}
+    }
     render() {
+        const inProgress = this.state.inProgress;
         return (
             <div className="login-form">
-                <input type="text" placeholder="Username" />
-                <input type="password" placeholder="Password" />
-                <div className="btn-wrapper">
+                <input hidden={inProgress} type="text" placeholder="Username" />
+                <input hidden={inProgress} type="password" placeholder="Password" />
+                <div hidden={inProgress} className="btn-wrapper" >
                     <div className="btn">GO</div>
+                </div>
+                <div hidden={!inProgress}>
+                    Loading!
+                    
+                </div>
+                <div>
+
                 </div>
             </div>
         )
