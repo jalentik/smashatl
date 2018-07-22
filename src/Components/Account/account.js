@@ -3,7 +3,7 @@ import "./account.css"
 import gc from '../../Media/gc.png'
 
 class LoginForm extends Component {
-    cosntructor(props){
+    constructor(props){
         super(props);
         this.state = {error: false, inProgress: false}
     }

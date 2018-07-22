@@ -5,16 +5,23 @@ import filterOptions from "./filterOptions";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import PropTypes from 'prop-types';
 
-var search = require('../../Media/search.png')
-var chevron = require('../../Media/chevron.png')
+var search = require('../../Media/search.png');
+var chevron = require('../../Media/chevron.png');
+
+
 
 const MyMapComponent = withScriptjs(withGoogleMap((props) =>
-    <GoogleMap
 
+    <GoogleMap
         defaultZoom={8}
         defaultCenter={{ lat: 33.772079, lng: -84.560692 }}
     >
+
+        <Marker
+            position={{ lat: parseFloat(props.mapMarkers[0].MarkerLat), lng: parseFloat(props.mapMarkers[0].MarkerLng) }}
+        />
     </GoogleMap>
 ))
 
@@ -23,8 +30,10 @@ class smashmap extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { chkPlayers: false, chkEvents: false, selectedChars: "", selectedPlaystyle: "", selectedRadius: "",
-        selectedEvents: false }
+        this.state = {
+            chkPlayers: false, chkEvents: false, selectedChars: "", selectedPlaystyle: "", selectedRadius: "",
+            selectedEvents: false, mapMarkers: [{MarkerLat: "", MarkerLng: "", MarkerId: 0}]
+        }
         this.togglePlayersFilter = this.togglePlayersFilter.bind(this);
         this.toggleEventsFilter = this.toggleEventsFilter.bind(this);
 
@@ -32,19 +41,28 @@ class smashmap extends Component {
         this.playFilterChange = this.playFilterChange.bind(this);
         this.radiusFilterChange = this.radiusFilterChange.bind(this);
 
-        this.venueFeeFilterChange = this.venueFeeFilterChange.bind(this);
-        this.potBonusFilterChange = this.potBonusFilterChange.bind(this);
-        this.OnlineSignupFilterChange = this.OnlineSignupFilterChange.bind(this);
 
         this.characters = filterOptions.characters;
         this.playstyles = filterOptions.playstyle;
         this.radius = filterOptions.radius;
 
-        this.venueFee = filterOptions.venueFee;
-        this.potBonus = filterOptions.potBonus;
-        this.onlineSignup = filterOptions.onlineSignup;
-    }
 
+    }
+    componentDidMount() {
+        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appmapmarkers").then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result)
+                    this.setState({
+                        mapMarkers: result
+                    })
+                },
+                (error) =>{
+                    console.log(error)
+                }
+            )
+            
+    }
     togglePlayersFilter() {
         const pl = this.state.chkPlayers;
         this.setState({ chkPlayers: !pl });
@@ -85,7 +103,7 @@ class smashmap extends Component {
         const selectedRadius = this.state.selectedRadius;
 
         const selectedEvents = this.state.selectedEvents;
-
+        const mapMarkers = this.state.mapMarkers;
         return (
             <div className="content-smashmap">
 
@@ -155,18 +173,22 @@ class smashmap extends Component {
                     <div className="filter-events">
                         <div className="events-filter-toggle" onClick={this.toggleEventsFilter}>
                             Events
-                            <input type="checkbox" value={selectedEvents}/>
+                            <input type="checkbox" value={selectedEvents} />
                         </div>
 
                     </div>
                 </div>
                 <div className="googlemap">
-                    <MyMapComponent
-                        isMarkerShown
+                    <MyMapComponent 
                         googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbJ0YYtlkCgbL6faPQSUv5U9BpVtqNaUg&v=3.exp&libraries=geometry,drawing,places"
                         loadingElement={<div style={{ height: `100%`, width: "100%" }} />}
                         containerElement={<div style={{ height: `100%`, flex: "1" }} />}
                         mapElement={<div style={{ height: `100%`, flex: "1" }} />}
+                        selectedChars={selectedChars}
+                        selectedPlaystyle={selectedPlaystyle}
+                        selectedRadius={selectedRadius}
+                        selectedEvents={selectedEvents}
+                        mapMarkers={mapMarkers}
                     />
                 </div>
             </div>
