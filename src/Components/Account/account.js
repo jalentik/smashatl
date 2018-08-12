@@ -1,6 +1,20 @@
 import React, { Component } from "react";
 import "./account.css"
 import gc from '../../Media/gc.png'
+class UserDetailRegistration extends Component {
+    constructor(props){
+        super(props);
+    }
+    render() {
+        return(
+            <div className="reg-container">
+                <input/>
+                <input/>
+                <input/>
+            </div>
+        )
+    }
+}
 
 class LoginForm extends Component {
     constructor(props){
@@ -68,15 +82,20 @@ class account extends Component {
                     <div className={tab == "signup" ? "header-tab-active" : "header-tab"} onClick={() => this.tabChange("signup")}>
                         Sign Up
                     </div>
+
                 </div>
 
                 <div className="content-container">
-                    <div className={tab == "login" ? "loginForm-container" : "loginForm-container-hidden"}>
+                    <div className={tab == "login" ? "Form-container" : "Form-container-hidden"}>
                         <LoginForm />
                     </div>
 
-                    <div className={tab == "signup" ? "signupForm-container" : "signupForm-container-hidden"}>
+                    <div className={tab == "signup" ? "Form-container" : "Form-container-hidden"}>
                         <SignupForm />
+                    </div>
+
+                    <div className={tab == "reg" ? "Form-container" : "Form-container-hidden"}>
+                        <UserDetailRegistration />
                     </div>
                 </div>
 

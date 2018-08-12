@@ -80,13 +80,12 @@ export default {
     ],
 
     radius:[
-        {value: 0, label: "10 Miles"},
-        {value: 1, label: "20 Miles"},
-        {value: 2, label: "30 Miles"},
-        {value: 3, label: "40 Miles"},
-        {value: 4, label: "50 Miles"},
+        {radiusVal: 16093.4, text: "10 Miles"},
+        {radiusVal: 32186.8, text: "20 Miles"},
+        {radiusVal: 48280.2, text: "30 Miles"},
+        {radiusVal: 64373.6, text: "40 Miles"},
+        {radiusVal: 80467, text: "50 Miles"},
     ],
-
     
 
     

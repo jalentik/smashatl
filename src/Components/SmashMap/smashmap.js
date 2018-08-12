@@ -1,29 +1,186 @@
-import React, { Component } from "react";
-import { compose, withProps } from "recompose"
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import React, { Component, createRef } from "react";
 import filterOptions from "./filterOptions";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import PropTypes from 'prop-types';
+import './smashmap.css'
+import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import { Circle } from "react-google-maps";
+import fb from '../../Media/fb.png';
+import twit from '../../Media/twit.png';
+import twtch from '../../Media/twitch.png';
+/* eslint-disable no-undef */
+/* global google */
+const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
+const _ = require("lodash");
+const { compose, withProps, lifecycle } = require("recompose");
+const google = window.google;
 
 var search = require('../../Media/search.png');
 var chevron = require('../../Media/chevron.png');
+var check = require('../../Media/check-symbol.png')
+var emptyCheck = require('../../Media/check-box-empty.png')
 
+const GAMap = compose(
+    withProps({
+        googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyDbJ0YYtlkCgbL6faPQSUv5U9BpVtqNaUg&v=3.exp&libraries=geometry,drawing,places",
+        loadingElement: <div style={{ height: `100%` }} />,
+        containerElement: <div style={{ height: `500px`, display: 'flex', flexDirection: 'row', flex: 1, transition: 'all ease-in-out 1s' }} />,
+        mapElement: <div style={{ height: `100%`, minWidth: `500px`, maxWidth: '700px', transition: 'all ease-in-out 1s', }} />,
+    }),
+    lifecycle({
+        componentWillMount() {
+            const refs = {}
 
+            this.setState({
+                bounds: null,
+                center: {
+                    lat: 33.7490, lng: -84.3880
+                },
+                usersInBounds: [],
+                onMapMounted: ref => {
+                    refs.map = ref;
+                },
+                onIdle: () => {
+                    this.setState({
+                        bounds: refs.map.getBounds(),
+                        center: refs.map.getCenter(),
+                    })
+                    if (this.props.mapUsers) {
+                        var usersInBounds = [];
+                        this.props.mapUsers.forEach(user => {
+                            var dist = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(user.lat, user.lng), this.state.center);
+                            if (dist <= this.props.radius) {
+                                var x = dist / 1609.34;
+                                user.dist = x.toFixed(0) + " miles";
+                                usersInBounds.push(user)
 
-const MyMapComponent = withScriptjs(withGoogleMap((props) =>
+                            }
+                        });
 
-    <GoogleMap
-        defaultZoom={8}
-        defaultCenter={{ lat: 33.772079, lng: -84.560692 }}
-    >
+                        this.setState({ usersInBounds: usersInBounds })
+                    }
+                },
+                onCircleMounted: ref => {
+                    refs.circle = ref;
+                },
+                onSearchBoxMounted: ref => {
+                    refs.searchBox = ref;
+                },
+                onPlacesChanged: () => {
+                    const places = refs.searchBox.getPlaces();
+                    const bounds = new google.maps.LatLngBounds();
 
-        <Marker
-            position={{ lat: parseFloat(props.mapMarkers[0].MarkerLat), lng: parseFloat(props.mapMarkers[0].MarkerLng) }}
-        />
-    </GoogleMap>
-))
+                    places.forEach(place => {
+                        if (place.geometry.viewport) {
+                            bounds.union(place.geometry.viewport)
+                        } else {
+                            bounds.extend(place.geometry.location)
+                        }
+                    });
+                    const nextMarkers = places.map(place => ({
+                        position: place.geometry.location,
+                    }));
+                    const nextCenter = _.get(nextMarkers, '0.position', this.state.center);
+
+                    this.setState({
+                        center: nextCenter,
+                        markers: nextMarkers,
+                    });
+                    refs.map.fitBounds(refs.circle.getBounds());
+                },
+                OnCenterChanged: () => {
+                    alert('test')
+                }
+            })
+        },
+    }),
+    withScriptjs,
+    withGoogleMap
+)(props =>
+    <div style={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
+        <GoogleMap
+            ref={props.onMapMounted}
+            defaultZoom={8}
+            center={props.center}
+            onIdle={props.onIdle}
+        >
+            <SearchBox
+                ref={props.onSearchBoxMounted}
+                bounds={props.bounds}
+                controlPosition={google.maps.ControlPosition.TOP_LEFT}
+                onPlacesChanged={props.onPlacesChanged}
+            >
+                <input
+                    type="text"
+                    placeholder="Customized your placeholder"
+                    style={{
+                        boxSizing: `border-box`,
+                        border: `1px solid transparent`,
+                        width: `240px`,
+                        height: `32px`,
+                        marginTop: `27px`,
+                        padding: `0 12px`,
+                        borderRadius: `3px`,
+                        boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+                        fontSize: `14px`,
+                        outline: `none`,
+                        textOverflow: `ellipses`,
+                    }}
+                />
+            </SearchBox>
+            <Circle center={props.center} radius={props.radius}
+                ref={props.onCircleMounted}
+                onCenterChanged={props.onCenterChanged}
+                options={{ strokeColor: "#a8c0fc", fillColor: "#D9E9FF", fillOpacity: 0.2, strokeOpacity: 1 }}
+
+            />
+
+        </GoogleMap>
+        <div style={{height:'500px',}}>
+            <div style={{ display: 'flex', flex: 1, flexDirection: 'column', overflowY: 'scroll', maxHeight: '500px' }}>
+                {props.usersInBounds.map((user) => {
+                    return (
+                        <div key={user.AppUserDetail.UserId} className="player-card">
+                            <div className="player-card-title justify-space-between">
+                                <div>
+                                    <p>{user.AppUserDetail.Tag}</p>
+                                </div>
+                                <div className="flex-row justify-evenly">
+                                    <img src={fb} className='social-image small' />
+                                    <img src={twit} className='social-image small' />
+                                    <img src={twtch} className='social-image small' />
+                                </div>
+                            </div>
+                            <div className="player-card-body">
+                                <div className="player-card-body-column" style={{ justifyContent: 'center' }}>
+                                    <p > {user.AppPlaystyle.StyleName} </p>
+                                </div>
+
+                                <div className="player-card-body-column justify-space-evenly">
+                                    <p className="main">{user.AppCharacter.CharacterName}</p>
+                                    <p className="secondary">{user.AppCharacter1.CharacterName}</p>
+                                </div>
+
+                                <div className="player-card-body-column">
+                                    <p>Friends: </p>
+                                    <a href="#">Media</a>
+                                </div>
+                            </div>
+                            <div className="player-card-footer">
+                                <p>~{user.dist}</p>
+                            </div>
+                        </div>
+                    )
+                })}
+                <div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+);
 
 class smashmap extends Component {
 
@@ -31,8 +188,9 @@ class smashmap extends Component {
         super(props);
 
         this.state = {
-            chkPlayers: false, chkEvents: false, selectedChars: "", selectedPlaystyle: "", selectedRadius: "",
-            selectedEvents: false, mapMarkers: [{MarkerLat: "", MarkerLng: "", MarkerId: 0}]
+            chkPlayers: false, selectedChars: "", selectedPlaystyle: "", selectedRadius: 32186.9,
+            selectedEvents: false, mapUsers: [], Circle: {},
+            searchQuery: "", centerPosition: { lat: 33.7490, lng: -84.3880 }
         }
         this.togglePlayersFilter = this.togglePlayersFilter.bind(this);
         this.toggleEventsFilter = this.toggleEventsFilter.bind(this);
@@ -45,32 +203,35 @@ class smashmap extends Component {
         this.characters = filterOptions.characters;
         this.playstyles = filterOptions.playstyle;
         this.radius = filterOptions.radius;
-
-
     }
+
     componentDidMount() {
-        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appmapmarkers").then(res => res.json())
-            .then(
-                (result) => {
-                    console.log(result)
-                    this.setState({
-                        mapMarkers: result
-                    })
-                },
-                (error) =>{
-                    console.log(error)
-                }
-            )
-            
+        var list = [];
+        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appusers")
+            .then(results => {
+                return results.json();
+            })
+            .then(dataLocs => {
+                dataLocs.forEach((dloc) => {
+                    var dlStr = dloc.AppLocation.LatLng;
+                    var str = dlStr.split(',');
+                    var lat = str[0];
+                    var lng = str[1];
+                    dloc.lat = lat;
+                    dloc.lng = lng;
+                })
+                this.setState({ mapUsers: dataLocs })
+            })
     }
+
     togglePlayersFilter() {
         const pl = this.state.chkPlayers;
         this.setState({ chkPlayers: !pl });
     }
 
     toggleEventsFilter() {
-        const ev = this.state.chkEvents;
-        this.setState({ chkEvents: !ev })
+        const ev = this.state.selectedEvents;
+        this.setState({ selectedEvents: !ev })
     }
 
     charFilterChange(selectedChars) {
@@ -90,10 +251,7 @@ class smashmap extends Component {
     }
 
     radiusFilterChange(selectedRadius) {
-        this.setState({ selectedRadius });
-        if (selectedRadius) {
-            console.log(selectedRadius);
-        }
+        this.setState({ selectedRadius: selectedRadius.radiusVal })
     }
 
 
@@ -101,19 +259,15 @@ class smashmap extends Component {
         const selectedChars = this.state.selectedChars;
         const selectedPlaystyle = this.state.selectedPlaystyle;
         const selectedRadius = this.state.selectedRadius;
-
         const selectedEvents = this.state.selectedEvents;
-        const mapMarkers = this.state.mapMarkers;
+        const mapUsers = this.state.mapUsers;
+
+        const centerPosition = this.state.defaultCenter;
         return (
             <div className="content-smashmap">
 
                 <div className="filter">
-                    <div className="filter-search">
-                        <div className="search-icon-wrapper">
-                            <img src={search} className="search-icon" />
-                        </div>
-                        <input className="map-search" type="text" placeholder="e.g. Woodstock" />
-                    </div>
+
                     <div className="filter-players">
                         <div className="players-filter-toggle" onClick={this.togglePlayersFilter}>
                             Players
@@ -158,8 +312,9 @@ class smashmap extends Component {
                                     onChange={this.radiusFilterChange}
                                     options={this.radius}
                                     value={selectedRadius}
-                                    labelKey={"label"}
-                                    valueKey={"value"}
+                                    labelKey={"text"}
+                                    valueKey={"radiusVal"}
+
                                 />
                             </div>
                             <div id='more-filters-box' className={this.state.chkPlayers ? 'filter-options-item-shown' : 'filter-options-item'}>
@@ -171,27 +326,28 @@ class smashmap extends Component {
 
                     </div>
                     <div className="filter-events">
-                        <div className="events-filter-toggle" onClick={this.toggleEventsFilter}>
+                        <div className="events-filter-toggle" >
                             Events
-                            <input type="checkbox" value={selectedEvents} />
+                            <div className="chk-events-wrapper" onClick={this.toggleEventsFilter}>
+                                <img src={selectedEvents ? check : emptyCheck} />
+                            </div>
                         </div>
-
                     </div>
+
                 </div>
                 <div className="googlemap">
-                    <MyMapComponent 
-                        googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbJ0YYtlkCgbL6faPQSUv5U9BpVtqNaUg&v=3.exp&libraries=geometry,drawing,places"
-                        loadingElement={<div style={{ height: `100%`, width: "100%" }} />}
-                        containerElement={<div style={{ height: `100%`, flex: "1" }} />}
-                        mapElement={<div style={{ height: `100%`, flex: "1" }} />}
-                        selectedChars={selectedChars}
-                        selectedPlaystyle={selectedPlaystyle}
-                        selectedRadius={selectedRadius}
-                        selectedEvents={selectedEvents}
-                        mapMarkers={mapMarkers}
-                    />
+                    <GAMap
+                        mapUsers={mapUsers}
+                        defaultCenter={centerPosition}
+                        radius={selectedRadius}
+                    >
+                    </GAMap>
+
+
                 </div>
+
             </div>
+
         )
     }
 }

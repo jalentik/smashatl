@@ -1,3 +1,5 @@
+
+
 .account-content{
     display: flex;
     width:800px;
@@ -27,7 +29,7 @@
     font-size: 30px;
 }
 
-.signupForm-container, .loginForm-container{
+.Form-container, .Form-container{
     width:100%;
     
     -webkit-transition: all 0.30s ease-in-out;
@@ -39,7 +41,7 @@
     border-bottom: 3px solid #000000;
 }
 
-.signupForm-container-hidden, .loginForm-container-hidden{
+.Form-container-hidden, .Form-container-hidden{
     width:100%;
 
     -webkit-transition: all 0.1s ease-in-out;
