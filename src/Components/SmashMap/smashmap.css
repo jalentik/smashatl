@@ -1,0 +1,135 @@
+.chk-events-wrapper{
+    width: 32px;
+    height:32px;
+    
+}
+
+.events-filter-toggle{
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+
+}
+.events-filter-toggle img{
+    margin-left: 25px;
+}
+
+.maps-search {
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    outline: none;
+    padding: 3px 0px 3px 3px;
+    margin: 5px 1px 3px 0px;
+    border-top:0px;
+    border-left: 0px;
+    border-right:0px;
+    border-bottom: 1px solid rgb(207, 207, 207);
+    font-size: 12px;
+  }
+   
+  
+.maps-search:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    padding: 3px 0px 3px 3px;
+    margin: 5px 1px 3px 0px;
+    border: 1px solid rgba(81, 203, 238, 1);
+  }
+
+  .map{
+      height:500px;
+        width:500px;
+  }
+
+.player-card{
+    flex: 1;
+    background: #fff;
+    padding-left:20px;
+    justify-content:space-between;
+    height:200px;
+}
+
+
+.player-card:nth-child(even){
+    background:whitesmoke;
+}
+
+.player-card:nth-child(even) .player-card-footer{
+    border-color:#fff;
+}
+
+.player-card-title{ 
+    font-size: 30px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    display: flex;
+    flex-direction: row;
+    }
+.player-card-title p{
+    margin: 0;
+    padding: 0;
+}
+.player-card-body{
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    height:150px;
+    }
+
+.player-card-body-column p, .player-card-body-column a{
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 300;
+    font-size:20px;
+    padding:0;
+    margin: 0;
+}
+.player-card-body-column p.main{
+    font-weight: 500;
+}
+.player-card-body-column p.secondary{
+    font-weight:500;
+    color:#5c5c5c;
+}
+.player-card-body-column{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin-left:5px;
+    margin-right: 5px;
+}
+
+.player-card-body-column:not(:last-child){
+    border-right: 1px solid #ddd;
+    padding-right:5px;
+}
+.player-card-footer{
+display: flex;
+    border-top: 1px solid #ddd;
+    
+}
+
+.justify-center{
+    justify-content: center;
+}
+
+.justify-space-evenly{
+    justify-content:space-evenly;
+}
+
+.justify-space-between{
+    justify-content: space-between;
+}
+.justify-end{
+    justify-content:end;
+}
+
+.flex-row{
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-column{
+    display: flex;
+    flex-direction: column;
+}
