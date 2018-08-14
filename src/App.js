@@ -19,7 +19,7 @@ import events from './Components/Events/events';
 import smashmap from './Components/SmashMap/smashmap';
 import account from './Components/Account/account';
 import faq from './Components/Faq/faq';
-
+import accountdetails from './Components/Account/AccountDetails/accountdetails.js'
 
 const App = () => (
   <BrowserRouter>
@@ -82,7 +82,7 @@ const App = () => (
                       <Route exact path="/smashmap" component={smashmap} />
                       <Route exact path="/faq" component={faq} />
                       <Route exact path="/account" component={account} />
-
+                      <Route exact path="/account/accountdetails" component={accountdetails} />
                       <Route render={() => <div>Not Found</div>} />
 
                     </Switch>

@@ -1,0 +1,220 @@
+
+
+
+.account-content{
+    display: flex;
+    width:800px;
+    height:500px;
+    flex-direction: column;
+    
+}
+
+.header-tabs-container{
+    display: flex;
+    width:100%;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+.header-tab{
+    cursor: pointer;
+    font-family: 'Quicksand', sans-serif;
+    color: #dddddd;
+    transition: all 0.3s ease-in-out;
+    font-size: 30px;
+}
+
+.header-tab-active{
+    cursor: pointer;
+    font-family: 'Quicksand', sans-serif;
+    color: #000000;
+    transition: all 0.3s ease-in-out;
+    font-size: 30px;
+}
+
+.public-container, .private-container{
+    width:100%;
+    -webkit-transition: all 0.70s ease-in-out;
+    -moz-transition: all 0.70s ease-in-out;
+    -ms-transition: all 0.70s ease-in-out;
+    -o-transition: all 0.70s ease-in-out;
+    transition: all 0.70s ease-in-out;
+    max-height: 500px;
+    border-bottom: 3px solid #000000;
+}
+
+.publicForm-container-hidden, .private-container-hidden{
+    width:100%;
+
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -ms-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+    max-height: 0;
+      overflow: hidden; 
+}
+
+.public-form{
+    width:100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.public-form-left{
+    display: flex;
+    flex-direction: column;
+    width:50%;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.public-form-right{
+    display: flex;
+    flex-direction: column;
+    width:50%;
+    justify-content: flex-start;
+}
+
+.public-form-left input{
+    font-family: 'Quicksand', sans-serif;
+    width: 75%;
+    font-size: 20px;
+    font-weight: 300;
+    
+}
+
+.public-form-right h1, h2{
+    font-family: 'Quicksand', sans-serif;
+}
+
+.public-form-right h1{
+    font-weight: 700;
+    font-size: 40px;
+}
+
+.public-form-right h2{
+    font-weight: 500;
+    font-size: 20px;
+    margin-top:-20px;
+}
+
+.public-form-right div.btn-wrapper{
+    width: 100%;
+    display:flex;
+    justify-content: center;
+    padding-bottom:10px;
+}
+
+.public-form-right div.btn-wrapper div.sub-btn {
+    border: 1px solid #000000;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    border-radius: 8px;
+    font-size:20px;
+    width: 100px;
+    text-align: center;                   
+}
+
+.personal-form div.btn-wrapper{
+    width: 100%;
+    display:flex;
+    justify-content: center;
+    padding-bottom:10px;
+}
+
+.personal-form div.btn-wrapper div.sub-btn {
+    border: 1px solid #9b9b9b;
+    color: #9b9b9b;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    border-radius: 8px;
+    font-size:20px;
+    width: 100px;
+    text-align: center;
+    margin-top: 3%; 
+    margin-left: 6%;                   
+}
+
+.account-footer{
+ display: flex;
+ width: 100%;
+justify-content: flex-end;
+text-align: center;
+padding-top:20px;
+}
+.account-footer p{
+    font-family: 'Quicksand', sans-serif;
+    font-weight:300;
+    font-size:8px;
+}
+.account-footer img{
+    height:100px;
+    width:100px;
+    margin-top:-10px;
+}
+
+ .personal-form{
+    display: flex;
+    width: 100%;
+    height:100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 200px;
+}
+
+
+.personal-form input{
+    font-family: 'Quicksand', sans-serif;
+    font-size: 30px;
+    width: 30%;
+    font-weight: 300;
+    margin-top: 5% !important;
+    
+    
+}
+
+#field-pair{ 
+    display: flex;
+    width: 100%;
+    height:100%;
+    flex-direction: row;
+
+}
+
+#field-pair input{
+    font-family: 'Quicksand', sans-serif;
+    font-size: 30px;
+    width: 30%;
+    font-weight: 300;
+    margin-top: 100px;
+   margin-left: 15%;
+   margin-bottom: 2%;
+    
+   
+}
+#descriptor{
+    font-family: 'Quicksand', sans-serif;
+    font-size: 30px;
+    width: 30%;
+    font-weight: 300;
+    margin-top: 100px;
+   margin-left: 17%;
+    
+}
+
+#title{
+    font-family: 'Quicksand', sans-serif;
+    font-size: 20px;
+    margin-right: auto;
+    margin-left:10%;
+}
+    
+    
+
+
+textarea {
+    height: 150px;
+    margin-bottom: 5px;
+    resize: none;
+}
