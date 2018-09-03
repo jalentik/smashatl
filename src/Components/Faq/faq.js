@@ -7,6 +7,10 @@ class faq extends Component {
         this.state = { responseId: 0 }
         this.showAnswer = this.showAnswer.bind(this);
     }
+    componentDidMount(){
+        document.title = "FAQ";
+
+    }
     showAnswer(id) {
         if (this.state.responseId !== id) {
             this.setState({ responseId: id });
@@ -18,7 +22,7 @@ class faq extends Component {
             { id: 0, response: "We are a group of GA smash players who want to bring the community closer than ever before. Our goal is to accelerate the evolution of the GA smash scene and eventually expand to the rest of the U.S." },
             { id: 1, response: "This is our flagship platform for SmashATL, designed to centralize everything you need to be involved with your community and optimized for ease of access." },
             { id: 2, response: "Right now, Facebook is the leading board in which users communicate everything smash-related due to the already present users and groups, etc. However, we feel like we can do better, and it all starts with our home scene." },
-            { id: 3, response: "As of 07/14/2018 T09:50:00, main functionality is left to be added in, however most static pages and controls are present, except for log in page." }
+            { id: 3, response: "As of 09/02/2018 T15:30:00, the current next step is handling events and social networking via smashatl." }
         ]
         const responseContent = faqContent[this.state.responseId].response
 

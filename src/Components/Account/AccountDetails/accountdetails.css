@@ -1,12 +1,37 @@
+.small{
+    width:85px;
+    height:85px;
+}
 
-
-
-.account-content{
-    display: flex;
-    width:800px;
-    height:500px;
+ul.account-menu-items li img.disabled{
+    opacity:0.2;
+}
+ul.account-menu-items li img{
+    transition: all ease-in-out .3s;
+    -o-transition: all ease-in-out .3s;
+    -moz-transition:  all ease-in-out .3s;
+    -webkit-transition:  all ease-in-out .3s;
+}
+ul.account-menu-items li{
+    display:flex;
+    justify-content: center;
+}
+ul.account-menu-items{
+    display: inline-flex;
+    list-style-type: none;
+    justify-content: space-evenly;
+    width:100%;
     flex-direction: column;
-    
+}
+
+
+.account-detail-content{
+    display: flex;
+    width:1000px;
+    height:500px;
+    flex-direction: row;
+    margin-left:-80px;
+
 }
 
 .header-tabs-container{
@@ -53,19 +78,25 @@
     max-height: 0;
       overflow: hidden; 
 }
-
+.account-settings-content{
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .public-form{
     width:100%;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
 }
 
 .public-form-left{
     display: flex;
     flex-direction: column;
     width:50%;
-    justify-content: space-evenly;
-    align-items: center;
+    justify-content: flex-start;
 }
 
 .public-form-right{
@@ -73,11 +104,12 @@
     flex-direction: column;
     width:50%;
     justify-content: flex-start;
+    
 }
 
-.public-form-left input{
+.public-form-left input, .public-form-right input{
     font-family: 'Quicksand', sans-serif;
-    width: 75%;
+    width: 90%;
     font-size: 20px;
     font-weight: 300;
     
@@ -217,4 +249,46 @@ textarea {
     height: 150px;
     margin-bottom: 5px;
     resize: none;
+}
+
+.option-container{
+    display: flex;
+    width:100%;
+    height:40px;
+    justify-content:space-between;
+}
+
+.option-container img{
+    height:25px;
+    width:25px;
+}
+
+.error{
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 300;
+    color:#be0c0c;
+    font-size: 20px;
+}
+
+.save-changes{
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -ms-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 300;
+    color:#fff;
+    background-color: #19a036;
+    font-size: 20px;
+    margin-top: 40px;
+    width:50%;
+    border-radius: 5px;
+    text-align: center;
+    height: 30px;
+}
+
+.save-changes:hover{
+    color:#19a036;
+    background-color: #fff;
 }

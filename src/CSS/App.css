@@ -250,9 +250,9 @@ align-items:center;
 padding-right:15px;
 width:100%;
 }
-.content-home > input{
+.content-home > p{
   width:50%;
-  font-size: 30px;
+  font-size: 18px;
   min-height:50px;
   padding-left: 10px;
   align-self: center;
@@ -401,7 +401,7 @@ flex-direction: row;
  top:0px;
 }
 
-input[type=text], input[type=password], textarea {
+input[type=text], input[type=password], input[type=email], textarea {
   -webkit-transition: all 0.30s ease-in-out;
   -moz-transition: all 0.30s ease-in-out;
   -ms-transition: all 0.30s ease-in-out;

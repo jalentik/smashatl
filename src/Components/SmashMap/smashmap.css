@@ -47,7 +47,8 @@
     background: #fff;
     padding-left:20px;
     justify-content:space-between;
-    height:200px;
+    max-height:250px;
+    width: 250px;
 }
 
 
@@ -55,9 +56,6 @@
     background:whitesmoke;
 }
 
-.player-card:nth-child(even) .player-card-footer{
-    border-color:#fff;
-}
 
 .player-card-title{ 
     font-size: 30px;
@@ -80,9 +78,16 @@
 .player-card-body-column p, .player-card-body-column a{
     font-family: 'Quicksand', sans-serif;
     font-weight: 300;
-    font-size:20px;
+    font-size:15px;
     padding:0;
     margin: 0;
+    text-decoration: none;  
+}
+
+.player-card-body-column p, .player-card-body-column a img{
+    width: 10px;
+    height:10px;
+    background: transparent;
 }
 .player-card-body-column p.main{
     font-weight: 500;
@@ -95,8 +100,11 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    margin-left:5px;
     margin-right: 5px;
+}
+
+.player-card-body-column:first-child{
+    margin-left: -5px;
 }
 
 .player-card-body-column:not(:last-child){
@@ -104,9 +112,8 @@
     padding-right:5px;
 }
 .player-card-footer{
-display: flex;
     border-top: 1px solid #ddd;
-    
+    padding-bottom: 10px;
 }
 
 .justify-center{
@@ -133,3 +140,48 @@ display: flex;
     display: flex;
     flex-direction: column;
 }
+
+.action-container{
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+    background-color:transparent;
+}
+.action-container a{
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -ms-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+    background-color:transparent;
+    border-radius: 50%;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    padding:15px;
+    cursor: pointer;
+}
+.action-container a img{
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -ms-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+    background-color: transparent;
+    height:25px;
+    width:25px;
+}
+
+.action-container a:hover img{
+    -webkit-filter: brightness(0) invert(1);
+    filter: brightness(0) invert(1);
+
+}
+
+.action-container a.clear-filter:hover{
+   background-color: rgb(196, 52, 42)
+}
+
+.action-container a.refresh-users:hover{
+    background-color: rgb(196, 185, 42)
+ }

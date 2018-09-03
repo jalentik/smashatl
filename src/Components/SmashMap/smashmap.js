@@ -3,13 +3,16 @@ import filterOptions from "./filterOptions";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
-import PropTypes from 'prop-types';
 import './smashmap.css'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 import { Circle } from "react-google-maps";
 import fb from '../../Media/fb.png';
 import twit from '../../Media/twit.png';
 import twtch from '../../Media/twitch.png';
+import iUser from '../../Media/user.png';
+import msg from '../../Media/mail.png';
+import vid from '../../Media/video-player.png'
+import report from '../../Media/warning.png'
 /* eslint-disable no-undef */
 /* global google */
 const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
@@ -21,6 +24,8 @@ var search = require('../../Media/search.png');
 var chevron = require('../../Media/chevron.png');
 var check = require('../../Media/check-symbol.png')
 var emptyCheck = require('../../Media/check-box-empty.png')
+var reload = require('../../Media/reload.svg')
+var clear = require('../../Media/clear-button.svg')
 
 const GAMap = compose(
     withProps({
@@ -90,11 +95,41 @@ const GAMap = compose(
                     });
                     refs.map.fitBounds(refs.circle.getBounds());
                 },
-                OnCenterChanged: () => {
-                    alert('test')
+                onRadiusChanged: () => {
+                    if (this.props.mapUsers) {
+                        var usersInBounds = [];
+                        this.props.mapUsers.forEach(user => {
+                            var dist = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(user.lat, user.lng), this.state.center);
+                            if (dist <= this.props.radius) {
+                                var x = dist / 1609.34;
+                                user.dist = x.toFixed(0) + " miles";
+                                usersInBounds.push(user)
+
+                            }
+                        });
+
+                        this.setState({ usersInBounds: usersInBounds })
+                    }
                 }
             })
         },
+        componentWillReceiveProps(nextProps) {
+            console.log(nextProps)
+            if (nextProps.mapUsers) {
+                var usersInBounds = [];
+                nextProps.mapUsers.forEach(user => {
+                    var dist = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(user.lat, user.lng), this.state.center);
+                    if (dist <= this.props.radius) {
+                        var x = dist / 1609.34;
+                        user.dist = x.toFixed(0) + " miles";
+                        usersInBounds.push(user)
+
+                    }
+                });
+
+                this.setState({ usersInBounds: usersInBounds })
+            }
+          }
     }),
     withScriptjs,
     withGoogleMap
@@ -132,13 +167,13 @@ const GAMap = compose(
             </SearchBox>
             <Circle center={props.center} radius={props.radius}
                 ref={props.onCircleMounted}
-                onCenterChanged={props.onCenterChanged}
+                onRadiusChanged={props.onRadiusChanged}
                 options={{ strokeColor: "#a8c0fc", fillColor: "#D9E9FF", fillOpacity: 0.2, strokeOpacity: 1 }}
 
             />
 
         </GoogleMap>
-        <div style={{height:'500px',}}>
+        <div style={{ height: '500px', }}>
             <div style={{ display: 'flex', flex: 1, flexDirection: 'column', overflowY: 'scroll', maxHeight: '500px' }}>
                 {props.usersInBounds.map((user) => {
                     return (
@@ -148,9 +183,9 @@ const GAMap = compose(
                                     <p>{user.AppUserDetail.Tag}</p>
                                 </div>
                                 <div className="flex-row justify-evenly">
-                                    <img src={fb} className='social-image small' />
-                                    <img src={twit} className='social-image small' />
-                                    <img src={twtch} className='social-image small' />
+                                    <a href={user.AppUserDetail.FacebookUrl} target="_blank"><img src={fb} style={{cursor: "pointer"}} className='social-image small' /></a>
+                                    <a href={user.AppUserDetail.TwitterUrl} target="_blank"><img src={twit} style={{cursor: "pointer"}} className='social-image small' /></a>
+                                    <a href={user.AppUserDetail.TwitchUrl} target="_blank"><img src={twtch} style={{cursor: "pointer"}} className='social-image small' /></a>
                                 </div>
                             </div>
                             <div className="player-card-body">
@@ -163,9 +198,13 @@ const GAMap = compose(
                                     <p className="secondary">{user.AppCharacter1.CharacterName}</p>
                                 </div>
 
-                                <div className="player-card-body-column">
-                                    <p>Friends: </p>
-                                    <a href="#">Media</a>
+                                <div className="player-card-body-column justify-space-evenly">
+                                    <p> </p>
+                                    <a href="#"><img src={vid} />Media</a>
+                                    <a href="#"><img src={msg} />Message</a>
+                                    <a href="#"><img src={iUser} />Profile</a>
+                                    <a href="#"><img src={report} />Report</a>
+
                                 </div>
                             </div>
                             <div className="player-card-footer">
@@ -189,7 +228,7 @@ class smashmap extends Component {
 
         this.state = {
             chkPlayers: false, selectedChars: "", selectedPlaystyle: "", selectedRadius: 32186.9,
-            selectedEvents: false, mapUsers: [], Circle: {},
+            selectedEvents: false, mapUsers: [], mapUsersResults: [], Circle: {},
             searchQuery: "", centerPosition: { lat: 33.7490, lng: -84.3880 }
         }
         this.togglePlayersFilter = this.togglePlayersFilter.bind(this);
@@ -203,13 +242,21 @@ class smashmap extends Component {
         this.characters = filterOptions.characters;
         this.playstyles = filterOptions.playstyle;
         this.radius = filterOptions.radius;
-    }
 
-    componentDidMount() {
+        this.clearFilters = this.clearFilters.bind(this);
+        this.refreshUsers = this.refreshUsers.bind(this);
+        this.filterUsers = this.filterUsers.bind(this);
+    }
+    fetchUsers() {
         var list = [];
-        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appusers")
+        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appusers/getappusers")
             .then(results => {
+                if(!results.ok){
+                    throw new Error("Something went wrong.")
+                }
+                else{
                 return results.json();
+                }
             })
             .then(dataLocs => {
                 dataLocs.forEach((dloc) => {
@@ -220,10 +267,53 @@ class smashmap extends Component {
                     dloc.lat = lat;
                     dloc.lng = lng;
                 })
-                this.setState({ mapUsers: dataLocs })
+                this.setState({ mapUsers: dataLocs }, this.filterUsers)
+                
             })
+            .catch(error => console.log(error))
     }
+    refreshUsers() {
+        this.fetchUsers();
+    }
+    clearFilters() {
+        this.setState({
+            chkPlayers: false, selectedChars: "", selectedPlaystyle: "", selectedRadius: 32186.9,
+            selectedEvents: false,
+            searchQuery: ""
+        })
+    }
+    componentDidMount() {
+        document.title = "SmashMap";
+        this.fetchUsers();
 
+
+
+    }
+    filterUsers() {
+        var list =[];
+        if(!this.state.selectedPlaystyle  && !this.state.selectedChars){
+          this.setState({mapUsersResults: this.state.mapUsers})
+        }else{
+            this.state.mapUsers.forEach(c => {
+                var match = false;
+                if (this.state.selectedChars)
+                    this.state.selectedChars.forEach(f => {
+                        if (c.MainId === f.charId) match = true;
+                        if (c.SecondaryId === f.charId) match = true;
+                    })
+    
+                if (this.state.selectedPlaystyle)
+                    this.state.selectedPlaystyle.forEach(f => {
+                        if (c.StyleId === f.playId) match = true;
+                    })
+    
+                if (match) list.push(c);
+            })
+            this.setState({ mapUsersResults: list }, function(){this.forceUpdate()});
+        }
+        
+
+    }
     togglePlayersFilter() {
         const pl = this.state.chkPlayers;
         this.setState({ chkPlayers: !pl });
@@ -235,23 +325,17 @@ class smashmap extends Component {
     }
 
     charFilterChange(selectedChars) {
-        this.setState({ selectedChars });
-        // selectedOption can be null when the `x` (close) button is clicked
-        if (selectedChars) {
-            console.log(selectedChars);
+        this.setState({ selectedChars }, this.filterUsers);
 
-        }
     }
 
     playFilterChange(selectedPlaystyle) {
-        this.setState({ selectedPlaystyle });
-        if (selectedPlaystyle) {
-            console.log(this.state.selectedPlaystyle);
-        }
+        this.setState({ selectedPlaystyle }, this.filterUsers);
+
     }
 
     radiusFilterChange(selectedRadius) {
-        this.setState({ selectedRadius: selectedRadius.radiusVal })
+        this.setState({ selectedRadius: selectedRadius.radiusVal }, this.filterUsers)
     }
 
 
@@ -260,7 +344,7 @@ class smashmap extends Component {
         const selectedPlaystyle = this.state.selectedPlaystyle;
         const selectedRadius = this.state.selectedRadius;
         const selectedEvents = this.state.selectedEvents;
-        const mapUsers = this.state.mapUsers;
+        const mapUsersResults = this.state.mapUsersResults;
 
         const centerPosition = this.state.defaultCenter;
         return (
@@ -269,6 +353,14 @@ class smashmap extends Component {
                 <div className="filter">
 
                     <div className="filter-players">
+                        <div className="action-container">
+                            <a onClick={this.refreshUsers} className="refresh-users">
+                                <img src={reload}></img>
+                            </a>
+                            <a onClick={this.clearFilters} className="clear-filter">
+                                <img src={clear}></img>
+                            </a>
+                        </div>
                         <div className="players-filter-toggle" onClick={this.togglePlayersFilter}>
                             Players
                             <img src={chevron} className={this.state.chkPlayers ? 'filter-chevron-active' : 'filter-chevron'} />
@@ -317,7 +409,7 @@ class smashmap extends Component {
 
                                 />
                             </div>
-                            <div id='more-filters-box' className={this.state.chkPlayers ? 'filter-options-item-shown' : 'filter-options-item'}>
+                            <div hidden id='more-filters-box' className={this.state.chkPlayers ? 'filter-options-item-shown' : 'filter-options-item'}>
                                 <div className="more-filters">
                                     More Filters
                                 </div>
@@ -337,7 +429,7 @@ class smashmap extends Component {
                 </div>
                 <div className="googlemap">
                     <GAMap
-                        mapUsers={mapUsers}
+                        mapUsers={mapUsersResults}
                         defaultCenter={centerPosition}
                         radius={selectedRadius}
                     >
