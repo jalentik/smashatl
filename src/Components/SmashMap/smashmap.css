@@ -91,10 +91,14 @@
 }
 .player-card-body-column p.main{
     font-weight: 500;
+    width: 100%;
+    text-align: center;
 }
 .player-card-body-column p.secondary{
     font-weight:500;
     color:#5c5c5c;
+    width: 100%;
+    text-align: center;
 }
 .player-card-body-column{
     display: flex;

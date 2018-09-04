@@ -13,6 +13,7 @@ import iUser from '../../Media/user.png';
 import msg from '../../Media/mail.png';
 import vid from '../../Media/video-player.png'
 import report from '../../Media/warning.png'
+
 /* eslint-disable no-undef */
 /* global google */
 const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
@@ -48,6 +49,7 @@ const GAMap = compose(
                     refs.map = ref;
                 },
                 onIdle: () => {
+                    console.log(this.props)
                     this.setState({
                         bounds: refs.map.getBounds(),
                         center: refs.map.getCenter(),
@@ -99,8 +101,8 @@ const GAMap = compose(
                     if (this.props.mapUsers) {
                         var usersInBounds = [];
                         this.props.mapUsers.forEach(user => {
-                            console.log({lat: parseInt(user.lat), lng: parseInt(user.lng)})
-                            var dist = google.maps.geometry.spherical.computeDistanceBetween({lat: parseInt(user.lat), lng: parseInt(user.lng)},this.state.center);
+                            console.log({ lat: parseInt(user.lat), lng: parseInt(user.lng) })
+                            var dist = google.maps.geometry.spherical.computeDistanceBetween({ lat: parseInt(user.lat), lng: parseInt(user.lng) }, this.state.center);
                             if (dist <= this.props.radius) {
                                 var x = dist / 1609.34;
                                 user.dist = x.toFixed(0) + " miles";
@@ -114,25 +116,10 @@ const GAMap = compose(
                 }
             })
         },
-        /*componentWillReceiveProps(nextProps) {
-            if(this.state.center){
-            if (nextProps.mapUsers) {
-                var usersInBounds = [];
-                nextProps.mapUsers.forEach(user => {
-                    console.log(user);
-                    var dist = google.maps.geometry.spherical.computeDistanceBetween({lat: parseInt(user.lat), lng: parseInt(user.lng)}, this.state.center);
-                    if (dist <= this.props.radius) {
-                        var x = dist / 1609.34;
-                        user.dist = x.toFixed(0) + " miles";
-                        usersInBounds.push(user)
+        componentWillReceiveProps(nextProps) {
+            this.forceUpdate();
 
-                    }
-                });
-
-                this.setState({ usersInBounds: usersInBounds })
-            }
-          }
-        }*/
+        }
     }),
     withScriptjs,
     withGoogleMap
@@ -186,19 +173,21 @@ const GAMap = compose(
                                     <p>{user.AppUserDetail.Tag}</p>
                                 </div>
                                 <div className="flex-row justify-evenly">
-                                    <a hidden={user.AppUserDetail.FacebookUrl ? true : false} href={user.AppUserDetail.FacebookUrl} target="_blank"><img src={fb} style={{cursor: "pointer"}} className='social-image small' /></a>
-                                    <a hidden={user.AppUserDetail.TwitterUrl ? true : false} href={user.AppUserDetail.TwitterUrl} target="_blank"><img src={twit} style={{cursor: "pointer"}} className='social-image small' /></a>
-                                    <a hidden={user.AppUserDetail.TwitchUrl ? true : false} href={user.AppUserDetail.TwitchUrl} target="_blank"><img src={twtch} style={{cursor: "pointer"}} className='social-image small' /></a>
+                                    <a hidden={!user.AppUserDetail.FacebookUrl} href={user.AppUserDetail.FacebookUrl} target="_blank"><img src={fb} style={{ cursor: "pointer" }} className='social-image small' /></a>
+                                    <a hidden={!user.AppUserDetail.TwitterUrl} href={user.AppUserDetail.TwitterUrl} target="_blank"><img src={twit} style={{ cursor: "pointer" }} className='social-image small' /></a>
+                                    <a hidden={!user.AppUserDetail.TwitchUrl} href={user.AppUserDetail.TwitchUrl} target="_blank"><img src={twtch} style={{ cursor: "pointer" }} className='social-image small' /></a>
                                 </div>
                             </div>
                             <div className="player-card-body">
                                 <div className="player-card-body-column" style={{ justifyContent: 'center' }}>
-                                    <p > {user.AppPlaystyle? user.AppPlaystyle.StyleName : ""} </p>
+                                    <p > {user.AppPlaystyle ? user.AppPlaystyle.StyleName : ""} </p>
                                 </div>
 
-                                <div className="player-card-body-column justify-space-evenly">
-                                    <p className="main">{user.AppCharacter? user.AppCharacter.CharacterName : ""}</p>
-                                    <p className="secondary">{user.AppCharacter1? user.AppCharacter1.CharacterName : ""}</p>
+                                <div style={{alignContent: "center"}} className="player-card-body-column">
+                                    <img hidden={!user.AppCharacter} style={{ height: "35px", width: "35px", margin:"0 auto" }} src={user.AppCharacter ? require("../../Media/Icons/" + props.filterOptions.characters[user.AppCharacter.CharacterId - 1].thumbnail) : ""} />
+                                    <p className="main">{user.AppCharacter ? user.AppCharacter.CharacterName : ""}</p>
+                                    <img hidden={!user.AppCharacter1} style={{ height: "35px", width: "35px", margin:"0 auto", marginTop: "10px" }} src={user.AppCharacter1 ? require("../../Media/Icons/" + props.filterOptions.characters[user.AppCharacter1.CharacterId - 1].thumbnail) : ""} />
+                                    <p className="secondary">{user.AppCharacter1 ? user.AppCharacter1.CharacterName : ""}</p>
                                 </div>
 
                                 <div className="player-card-body-column justify-space-evenly">
@@ -254,11 +243,11 @@ class smashmap extends Component {
         var list = [];
         fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appusers/getappusers")
             .then(results => {
-                if(!results.ok){
+                if (!results.ok) {
                     throw new Error("Something went wrong.")
                 }
-                else{
-                return results.json();
+                else {
+                    return results.json();
                 }
             })
             .then(dataLocs => {
@@ -271,7 +260,7 @@ class smashmap extends Component {
                     dloc.lng = lng;
                 })
                 this.setState({ mapUsers: dataLocs }, this.filterUsers)
-                
+
             })
             .catch(error => console.log(error))
     }
@@ -283,7 +272,7 @@ class smashmap extends Component {
             chkPlayers: false, selectedChars: "", selectedPlaystyle: "", selectedRadius: 32186.9,
             selectedEvents: false,
             searchQuery: ""
-        })
+        }, this.filterUsers)
     }
     componentDidMount() {
         document.title = "SmashMap";
@@ -293,10 +282,10 @@ class smashmap extends Component {
 
     }
     filterUsers() {
-        var list =[];
-        if(!this.state.selectedPlaystyle  && !this.state.selectedChars){
-          this.setState({mapUsersResults: this.state.mapUsers})
-        }else{
+        var list = [];
+        if (!this.state.selectedPlaystyle && !this.state.selectedChars) {
+            this.setState({ mapUsersResults: this.state.mapUsers })
+        } else {
             this.state.mapUsers.forEach(c => {
                 var match = false;
                 if (this.state.selectedChars)
@@ -304,17 +293,17 @@ class smashmap extends Component {
                         if (c.MainId === f.charId) match = true;
                         if (c.SecondaryId === f.charId) match = true;
                     })
-    
+
                 if (this.state.selectedPlaystyle)
                     this.state.selectedPlaystyle.forEach(f => {
                         if (c.StyleId === f.playId) match = true;
                     })
-    
+
                 if (match) list.push(c);
             })
-            this.setState({ mapUsersResults: list }, function(){this.forceUpdate()});
+            this.setState({ mapUsersResults: list }, function () { this.forceUpdate() });
         }
-        
+
 
     }
     togglePlayersFilter() {
@@ -435,6 +424,8 @@ class smashmap extends Component {
                         mapUsers={mapUsersResults}
                         defaultCenter={centerPosition}
                         radius={selectedRadius}
+                        filterOptions={filterOptions}
+
                     >
                     </GAMap>
 
