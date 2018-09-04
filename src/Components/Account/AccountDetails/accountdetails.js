@@ -13,6 +13,7 @@ var emptyCheck = require('../../../Media/check-box-empty.png')
 var settings = require('../../../Media/settings.svg')
 var videoplayer = require('../../../Media/video-player.svg')
 var logout = require('../../../Media/exit.svg')
+var home = require('../../../Media/home.svg')
 
 const cookies = new Cookies();
 
@@ -93,7 +94,7 @@ DropdownOptions.propTypes = {
 class AccountSettings extends Component {
     constructor(props) {
         super(props);
-        this.state = { selectedMain: -1, selectedSecondary: -1, tag: "", twit: "", fb: "", twtch: "" }
+        this.state = { selectedMain: -1, selectedSecondary: -1, tag: "", twit: "", fb: "", twtch: "", selectedPlaystyle: -1 }
         this.mainSelectionChanged = this.mainSelectionChanged.bind(this);
         this.secondarySelectionChanged = this.secondarySelectionChanged.bind(this);
         this.optionRenderer = this.optionRenderer.bind(this);
@@ -102,14 +103,14 @@ class AccountSettings extends Component {
         this.twitChange = this.twitChange.bind(this);
         this.fbChange = this.fbChange.bind(this);
         this.twtchChange = this.twtchChange.bind(this);
-
+        this.playstyleChange = this.playstyleChange.bind(this);
     }
     componentDidMount() {
         if (this.props.location.state) {
             this.setState({
                 selectedMain: this.props.location.state.main || -1, selectedSecondary: this.props.location.state.secondary || -1,
                 tag: this.props.location.state.tag, twit: this.props.location.state.twitterurl || "", fb: this.props.location.state.facebookurl || "",
-                twtch: this.props.location.state.twitchurl || ""
+                twtch: this.props.location.state.twitchurl || "", selectedPlaystyle: this.props.location.state.playstyle || -1
             })
         }
         else if (cookies.get('userDetails')) {
@@ -117,7 +118,7 @@ class AccountSettings extends Component {
             this.setState({
                 selectedMain: userDetails.main || -1, selectedSecondary: userDetails.secondary || -1,
                 tag: userDetails.tag, twit: userDetails.twitterurl || "", fb: userDetails.facebookurl || "",
-                twtch: userDetails.twitchurl || ""
+                twtch: userDetails.twitchurl || "", selectedPlaystyle: userDetails.playstyle || -1
             })
         }
     }
@@ -130,7 +131,6 @@ class AccountSettings extends Component {
         )
     }
     mainSelectionChanged(val) {
-        console.log(val)
         this.setState({ selectedMain: val.charId })
     }
 
@@ -138,12 +138,11 @@ class AccountSettings extends Component {
         this.setState({ selectedSecondary: val.charId })
     }
     saveChanges() {
-        var twtch = !(this.state.twtch.indexOf("www.") > 0)  && !(this.state.twtch.indexOf("http://") > 0) && this.state.twtch? "http://www." + this.state.twtch : this.state.twtch;
-        var fb = !(this.state.fb.indexOf("www.") > 0)  && !(this.state.fb.indexOf("http://") > 0) && this.state.fb ? "http://www." + this.state.fb : this.state.fb;
-        var twit = !(this.state.twit.indexOf("www.") > 0)  && !(this.state.twit.indexOf("http://") && this.state.twit > 0) ? "http://www." + this.state.twit : this.state.twit;
-
-                
-        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appuserdetails/savechanges", { //http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appuserdetails/savechanges
+        var twtch = !(this.state.twtch.indexOf("www.") > 0) && !(this.state.twtch.indexOf("http://") > 0) && this.state.twtch ? "http://www." + this.state.twtch : this.state.twtch;
+        var fb = !(this.state.fb.indexOf("www.") > 0) && !(this.state.fb.indexOf("http://") > 0) && this.state.fb ? "http://www." + this.state.fb : this.state.fb;
+        var twit = !(this.state.twit.indexOf("www.") > 0) && !(this.state.twit.indexOf("http://" > 0) && this.state.twit > 0) ? "http://www." + this.state.twit : this.state.twit;
+        if (!this.state.selectedMain || !this.state.tag || !this.state.selectedPlaystyle) { alert('A main, tag, and playstyle are required.'); return; }
+        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appuserdetails/savechanges",{
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -157,13 +156,23 @@ class AccountSettings extends Component {
                 TwitchUrl: twtch,
                 TwitterUrl: twit,
                 FacebookUrl: fb,
-
+                PlaystyleId: this.state.selectedPlaystyle
             })
         })
             .then(results => {
                 if (!results.ok) { throw new Error("Something went wrong.") }
                 else {
                     alert('Your changes have been saved.')
+                    this.props.location.setUserDetails({
+                        id: this.props.location.state.id,
+                        main: this.state.selectedMain,
+                        secondary: this.state.selectedSecondary,
+                        tag: this.state.tag,
+                        twitchurl: twtch,
+                        twitterurl: twit,
+                        facebookurl: fb,
+                        playstyle: this.state.selectedPlaystyle
+                    })
                 }
             })
             .catch(error => {
@@ -174,35 +183,49 @@ class AccountSettings extends Component {
         this.setState({ tag: tag.target.value })
     }
     twitChange(tw) {
-        if (tw.target.value.indexOf("twitter.com") > 0)
-            this.setState({ twit: tw.target.value })
+        this.setState({ twit: tw.target.value })
 
     }
     fbChange(fb) {
-        if (fb.target.value.indexOf("facebook.com") > 0)
-            this.setState({ fb: fb.target.value })
+        this.setState({ fb: fb.target.value })
 
     }
     twtchChange(tt) {
-        if (tt.target.value.indexOf("twitch.tv") > 0)
-            this.setState({ twtch: tt.target.value })
+        this.setState({ twtch: tt.target.value })
 
     }
+    playstyleChange(ps) {
+        this.setState({ selectedPlaystyle: ps.playId })
+    }
     render() {
+        const playstyles = filterOptions.playstyle;
         const characters = filterOptions.characters;
         const selectedMain = this.state.selectedMain;
         const selectedSecondary = this.state.selectedSecondary;
         const optionRenderer = this.optionRenderer;
-
+        const selectedPlaystyle = this.state.selectedPlaystyle;
         const twtch = this.state.twtch;
         const twit = this.state.twit;
         const fb = this.state.fb;
 
         const tag = this.state.tag;
+
         return (
             <div className="account-settings-content">
                 <div className="public-form">
                     <div className="public-form-left">
+                        <p id="title">Playstyle</p>
+                        <Select
+                            className="character-select"
+                            placeholder="Select Playstyle"
+                            closeOnSelect={true}
+                            onChange={this.playstyleChange}
+                            options={playstyles}
+                            labelKey={"playName"}
+                            valueKey={"playId"}
+                            value={selectedPlaystyle}
+                        />
+
                         <p id="title">Main</p>
                         <Select
                             optionComponent={DropdownOptions}
@@ -216,20 +239,6 @@ class AccountSettings extends Component {
                             value={selectedMain}
                             optionRenderer={optionRenderer}
                         />
-
-                        <p id="title">Tag</p>
-                        <input onChange={this.tagChange} value={tag} type="text" placeholder="My tag" />
-
-                        <p id="title">Facebook</p>
-                        <input onChange={this.fbChange} value={fb} type="text" placeholder="www.facebook.com/myfbname" />
-
-
-
-
-
-
-                    </div>
-                    <div className="public-form-right">
                         <p id="title">Secondary</p>
                         <Select
                             optionComponent={DropdownOptions}
@@ -244,16 +253,42 @@ class AccountSettings extends Component {
                             optionRenderer={optionRenderer}
                         />
 
+
+
+
+
+
+                    </div>
+                    <div className="public-form-right">
+
+                        <p id="title">Facebook</p>
+                        <input onChange={this.fbChange} value={fb} type="text" placeholder="www.facebook.com/myfbname" />
+
+
                         <p id="title">Twitter</p>
                         <input onChange={this.twitChange} value={twit} type="text" placeholder="www.twitter.com/mytwittername" />
 
                         <p id="title">Twitch</p>
                         <input onChange={this.twtchChange} value={twtch} type="text" placeholder="www.twitch.tv/mytwitchname" />
+                        <p id="title">Tag</p>
+                        <input onChange={this.tagChange} value={tag} type="text" placeholder="My tag" />
 
 
                     </div>
                 </div>
                 <a onClick={this.saveChanges} className="save-changes" style={{ cursor: "pointer" }}>Save Changes</a>
+            </div>
+        )
+    }
+}
+class accounthome extends Component {
+    render() {
+        return (
+            <div style={{ width: "50%" }}>
+                <h2>
+                    Welcome to your account home. If this is your first time logging in, you should head to account settings via the cog icon to the left and update your account details.
+                    Later on, this panel will be utilized as a dashboard to be displayed on login as a summary of current user experiences and updates.
+                  </h2>
             </div>
         )
     }
@@ -274,9 +309,7 @@ class accountdetails extends Component {
     }
     LogOutUser() {
         this.props.userHasAuthenticated(false);
-        this.props.setUserDetails({});
-        cookies.remove('userDetails');
-        cookies.remove('isAuthenticated')
+        this.props.clearUser();
         this.props.history.push("/account")
     }
     render() {
@@ -286,12 +319,23 @@ class accountdetails extends Component {
             <Router>
                 <div className="account-detail-content">
                     <ul className="account-menu-items">
+                        <li id="home-link">
+                            <Link to={{
+                                pathname: '/Account/AccountDetails/',
+                                state: this.props.userDetails,
+                                setUserDetails: this.props.setUserDetails,
+                                
+                            }}>
+                                <img  className={"small"} src={home} />
+                            </Link>
+                        </li>
                         <li><img className={"disabled small"} src={network} /></li>
-                        <li onClick={setViewing}>
+                        <li id="settings-link"  onClick={setViewing}>
 
                             <Link to={{
                                 pathname: '/Account/AccountDetails/AccountSettings',
-                                state: this.props.userDetails
+                                state: this.props.userDetails,
+                                setUserDetails: this.props.setUserDetails
                             }}>
                                 <img className={"small"} src={settings} />
 
@@ -299,12 +343,13 @@ class accountdetails extends Component {
 
                         </li>
                         <li><img className={"disabled small"} src={videoplayer} /></li>
-                        <li><a style={{ cursor: "pointer" }} onClick={this.LogOutUser}><img className={"small"} src={logout} /></a></li>
+                        <li id="logout-link"><a  style={{ cursor: "pointer" }} onClick={this.LogOutUser}><img className={"small"} src={logout} /></a></li>
 
                     </ul>
 
-                    <div style={{ maxHeight: "700px", width: "100%", overflowY: "auto", justifyContent: "center", display: "flex" }}>
+                    <div style={{ maxHeight: "800px", width: "100%", overflowY: "auto", justifyContent: "center", display: "flex" }}>
                         <Route exact path="/Account/AccountDetails/AccountSettings" component={AccountSettings} />
+                        <Route exact path="/Account/AccountDetails/" component={accounthome} />
                     </div>
                 </div>
             </Router>

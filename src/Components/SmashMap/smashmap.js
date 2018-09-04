@@ -99,7 +99,8 @@ const GAMap = compose(
                     if (this.props.mapUsers) {
                         var usersInBounds = [];
                         this.props.mapUsers.forEach(user => {
-                            var dist = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(user.lat, user.lng), this.state.center);
+                            console.log({lat: parseInt(user.lat), lng: parseInt(user.lng)})
+                            var dist = google.maps.geometry.spherical.computeDistanceBetween({lat: parseInt(user.lat), lng: parseInt(user.lng)},this.state.center);
                             if (dist <= this.props.radius) {
                                 var x = dist / 1609.34;
                                 user.dist = x.toFixed(0) + " miles";
@@ -113,12 +114,13 @@ const GAMap = compose(
                 }
             })
         },
-        componentWillReceiveProps(nextProps) {
-            console.log(nextProps)
+        /*componentWillReceiveProps(nextProps) {
+            if(this.state.center){
             if (nextProps.mapUsers) {
                 var usersInBounds = [];
                 nextProps.mapUsers.forEach(user => {
-                    var dist = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(user.lat, user.lng), this.state.center);
+                    console.log(user);
+                    var dist = google.maps.geometry.spherical.computeDistanceBetween({lat: parseInt(user.lat), lng: parseInt(user.lng)}, this.state.center);
                     if (dist <= this.props.radius) {
                         var x = dist / 1609.34;
                         user.dist = x.toFixed(0) + " miles";
@@ -130,6 +132,7 @@ const GAMap = compose(
                 this.setState({ usersInBounds: usersInBounds })
             }
           }
+        }*/
     }),
     withScriptjs,
     withGoogleMap
@@ -183,19 +186,19 @@ const GAMap = compose(
                                     <p>{user.AppUserDetail.Tag}</p>
                                 </div>
                                 <div className="flex-row justify-evenly">
-                                    <a href={user.AppUserDetail.FacebookUrl} target="_blank"><img src={fb} style={{cursor: "pointer"}} className='social-image small' /></a>
-                                    <a href={user.AppUserDetail.TwitterUrl} target="_blank"><img src={twit} style={{cursor: "pointer"}} className='social-image small' /></a>
-                                    <a href={user.AppUserDetail.TwitchUrl} target="_blank"><img src={twtch} style={{cursor: "pointer"}} className='social-image small' /></a>
+                                    <a hidden={user.AppUserDetail.FacebookUrl ? true : false} href={user.AppUserDetail.FacebookUrl} target="_blank"><img src={fb} style={{cursor: "pointer"}} className='social-image small' /></a>
+                                    <a hidden={user.AppUserDetail.TwitterUrl ? true : false} href={user.AppUserDetail.TwitterUrl} target="_blank"><img src={twit} style={{cursor: "pointer"}} className='social-image small' /></a>
+                                    <a hidden={user.AppUserDetail.TwitchUrl ? true : false} href={user.AppUserDetail.TwitchUrl} target="_blank"><img src={twtch} style={{cursor: "pointer"}} className='social-image small' /></a>
                                 </div>
                             </div>
                             <div className="player-card-body">
                                 <div className="player-card-body-column" style={{ justifyContent: 'center' }}>
-                                    <p > {user.AppPlaystyle.StyleName} </p>
+                                    <p > {user.AppPlaystyle? user.AppPlaystyle.StyleName : ""} </p>
                                 </div>
 
                                 <div className="player-card-body-column justify-space-evenly">
-                                    <p className="main">{user.AppCharacter.CharacterName}</p>
-                                    <p className="secondary">{user.AppCharacter1.CharacterName}</p>
+                                    <p className="main">{user.AppCharacter? user.AppCharacter.CharacterName : ""}</p>
+                                    <p className="secondary">{user.AppCharacter1? user.AppCharacter1.CharacterName : ""}</p>
                                 </div>
 
                                 <div className="player-card-body-column justify-space-evenly">

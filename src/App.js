@@ -42,11 +42,12 @@ class App extends Component {
         email: "",
         twitterurl: "",
         twitchurl: "",
-        facebookurl: ""
-
+        facebookurl: "",
+        playstyle: -1
       }
 
     }
+    this.clearUser = this.clearUser.bind(this)
   }
   setUserDetails = userDetails => {
     this.setState({ userDetails: userDetails })

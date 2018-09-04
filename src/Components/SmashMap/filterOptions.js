@@ -1,9 +1,9 @@
 export default {
     playstyle:[
-        {playId: 0, playName:"Beginner", blank:""},
-        {playId: 1, playName:"Casual", blank:""},
-        {playId: 2, playName:"Competitive", blank:""},
-        {playId: 3, playName:"Experimental", blank:""}
+        {playId: 1, playName:"Beginner", blank:""},
+        {playId: 2, playName:"Casual", blank:""},
+        {playId: 3, playName:"Competitive", blank:""},
+        {playId: 4, playName:"Experimental", blank:""}
     ],
     characters:[
         {charId:1, charName: "Bayonetta", thumbnail:"bayonetta.png"},

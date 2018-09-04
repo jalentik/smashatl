@@ -16,7 +16,7 @@ class home extends Component {
                     <h1>Find Georgia Locals</h1>
                     <h2>Join the competition and find players near you.</h2>
                 </div>
-                <p>
+                
                     <h3>Announcements</h3>
                     Changelog 1:
                     <ul>
@@ -25,7 +25,7 @@ class home extends Component {
                         <li>Account settings is active.</li>
 
                         </ul>
-                </p>
+                
             </div>
 
         )

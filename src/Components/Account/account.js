@@ -27,10 +27,10 @@ class LoginForm extends Component {
         this.toggleHasError = this.toggleHasError.bind(this);
         this.checkEnterKeyPress = this.checkEnterKeyPress.bind(this);
     }
-    checkEnterKeyPress(e){
-      if(e.key === "Enter"){
-          this.loginUser();
-      }
+    checkEnterKeyPress(e) {
+        if (e.key === "Enter") {
+            this.loginUser();
+        }
     }
     userChanged(u) {
         if (u) {
@@ -42,22 +42,21 @@ class LoginForm extends Component {
             this.setState({ pass: p.target.value })
         }
     }
-    toggleHasError(){
-        this.setState({hasError: !this.state.hasError })
-        console.log(this.state.hasError)
+    toggleHasError() {
+        this.setState({ hasError: !this.state.hasError })
     }
     loginUser() {
         var u = this.state.user;
         var p = this.state.pass;
-        if(this.state.hasError){
+        if (this.state.hasError) {
             this.toggleHasError();
         }
         if (u && p) {
             fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appuserdetails/authorizeuser", { //http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appuserdetails/auth
                 method: 'POST',
                 headers: {
-                 Accept: 'application/json',
-                 'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     User: u,
@@ -65,19 +64,19 @@ class LoginForm extends Component {
                 })
             })
                 .then(results => {
-                        if(!results.ok){this.toggleHasError(); throw new Error("Something went wrong.")}
-                        else{
-                             return results.json();
-                            
-                        }
+                    if (!results.ok) { this.toggleHasError(); throw new Error("Something went wrong.") }
+                    else {
+                        return results.json();
+
+                    }
                 })
                 .then(data => {
                     this.props.props.setUserDetails(data)
-                            this.props.props.userHasAuthenticated(true);
-                            this.props.props.history.push('/account/accountdetails/')
+                    this.props.props.userHasAuthenticated(true);
+                    this.props.props.history.push('/account/accountdetails/')
                 })
-                .catch(error =>{
-                    this.setState({errorMsg: "Something went wrong."})
+                .catch(error => {
+                    this.setState({ errorMsg: "Something went wrong." })
                     this.toggleHasError();
                 })
 
@@ -96,7 +95,7 @@ class LoginForm extends Component {
                 <input hidden={inProgress} onKeyPress={this.checkEnterKeyPress} onChange={this.userChanged} value={user} type="text" placeholder="Username" />
                 <input hidden={inProgress} onKeyPress={this.checkEnterKeyPress} onChange={this.passChanged} value={pass} type="password" placeholder="Password" />
                 <div hidden={inProgress} className="btn-wrapper" >
-                    <div className="btn" style={{cursor:"pointer"}} onClick={this.loginUser}>GO</div>
+                    <div className="btn" style={{ cursor: "pointer" }} onClick={this.loginUser}>GO</div>
                 </div>
                 <p className={"error"}>{errorMsg}</p>
                 <div hidden={!inProgress}>
@@ -114,7 +113,7 @@ class SignupForm extends Component {
     constructor(props) {
         super(props);
         this.formSubmitted = this.formSubmitted.bind(this);
-        this.state = { user: "", pass: "", confirm: "", email: "", zipcode: "", tag: "", phone: "" }
+        this.state = { user: "", pass: "", confirm: "", email: "", zipcode: "", tag: "", phone: "", hasError:false, errorMsg: "" }
         this.userChanged = this.userChanged.bind(this)
         this.passChanged = this.passChanged.bind(this)
         this.confirmChanged = this.confirmChanged.bind(this)
@@ -122,7 +121,11 @@ class SignupForm extends Component {
         this.tagChanged = this.tagChanged.bind(this)
         this.emailChanged = this.emailChanged.bind(this)
         this.phoneChanged = this.phoneChanged.bind(this)
-
+        this.toggleHasError = this.toggleHasError.bind(this)
+    }
+    toggleHasError(err){
+        this.setState({ hasError: !this.state.hasError, errorMsg:err })
+        
     }
     userChanged(user) {
         this.setState({ user: user.target.value })
@@ -147,46 +150,79 @@ class SignupForm extends Component {
     }
 
 
+
     formSubmitted(e) {
         e.preventDefault();
         if (this.state.user && this.state.pass && this.state.confirm && this.state.email && this.state.zipcode && this.state.pass === this.state.confirm && this.state.tag) {
             this.btnSignup.disabled = true;
-            fetch('http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/applocations/getapplocations/' + this.state.zipcode, {
-                method:'GET',
-                
-            }).then(response => response.json()).then(zip =>{})
+            var zipObj = {};
+            fetch('http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/applocations/getapplocation/' + this.state.zipcode, {
+                method: 'GET',
+            }).then(response => { if (response.ok) { return response.json() } else { throw new Error("Something went wrong.") } }).then(zip => {
+                zipObj = zip;
+                fetch('http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appuserdetails/postappuserdetail', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
 
-            fetch('http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appuserdetails/postappuserdetail', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
+                    body: JSON.stringify({
+                        username: this.state.user,
+                        passwordHash: this.state.pass,
+                        email: this.state.email,
+                        tag: this.state.tag,
+                        phone: this.state.phone ? this.state.phone : ""
+                    })
 
-                body: JSON.stringify({
-                    username: this.state.user,
-                    passwordHash: this.state.pass,
-                    email: this.state.email,
-                    tag: this.state.tag,
-                    phone: this.state.phone ? this.state.phone : ""
-                })
+                }).then(results => { if (results.ok) { return results.json() } else { throw new Error("Something went wrong.") } })
+                    .then(response => {
+                        fetch('http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appusers/postappuser', {
+                            method: 'POST',
+                            headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                UserId: response.UserId,
+                                LocId: zip.LocId
+                            })
+                        }).then(res => { if (res.ok) { return res.json() } else if (res.status == 412) { return new Error("user") } })
+                            .then(appUser => {
+                                this.btnSignup.disabled = false;
+                                if (appUser.AppUserId > 0) {
+                                    this.props.props.setUserDetails({
+                                        id: response.UserId,
+                                        tag: response.Tag,
+                                        main: -1,
+                                        secondary: -1,
+                                        zipcode: zip.Zipcode,
+                                        email: response.Email,
+                                        twitterurl: "",
+                                        twitchurl: "",
+                                        facebookurl: "",
+                                        playstyle: -1
+                                    });
+                                    this.props.props.userHasAuthenticated(true);
+                                    this.props.props.history.push('/account/accountdetails')
+                                } else {
+                                    alert('Something went wrong while signing up. Try again later.')
+                                }
+                            }).catch(ex => console.log(ex))
 
-            }).then(results => results.json())
-                .then(response => {
-                    console.log(response)
-                    this.btnSignup.disabled = false;
-                    if (response.id) {
-                        this.props.props.setUserDetails(response);
-                        this.props.props.userHasAuthenticated(true);
-                        return (
-                            <Redirect to="/account/accountdetails" />
-                        )
-                    }
-                }).catch(error => {
-                    console.log(error);
-                    this.btnSignup.disabled = false;
-                })
-        } else {
+                    }).catch(error => {
+                        if (error = "user") {
+                           this.toggleHasError('Username is not available.');
+                           this.user.focus();
+                         } 
+                        this.btnSignup.disabled = false;
+                    })
+
+
+            })
+                .catch(ex => console.log(ex))
+        }
+        else {
             this.btnSignup.disabled = false;
             if (!this.state.user) {
                 this.user.className = "validation-fail"
@@ -218,13 +254,14 @@ class SignupForm extends Component {
             } else {
                 this.tag.className = ""
             }
+
         }
     }
     render() {
         return (
             <form className="signup-form" onSubmit={this.formSubmitted}>
                 <div className="signup-form-left">
-
+                    <p hidden={!this.state.hasError} className="validation-message">{this.state.errorMsg}</p>
                     <input id="user" ref={user => this.user = user} value={this.state.user} onChange={this.userChanged} type="text" placeholder="Username" />
                     <input id="pass" ref={pass => this.pass = pass} value={this.state.pass} onChange={this.passChanged} type="password" placeholder="Password" />
                     <input id="confirm" ref={confirm => this.confirm = confirm} value={this.state.confirm} onChange={this.confirmChanged} type="password" placeholder="Confirm Password" />
@@ -238,7 +275,7 @@ class SignupForm extends Component {
                     <h1>Welcome</h1>
                     <h2> With every new user, we get closer to our goal of becoming the #1 platform for the smash community in our lovely state of GA. Thank you, and we look forward to growing with you as individuals and as a community.</h2>
                     <div className="btn-wrapper">
-                        <input ref={btnSignup => this.btnSignup = btnSignup}  style={{cursor:"pointer"}} className="btn" type="submit" value="JOIN" />
+                        <input ref={btnSignup => this.btnSignup = btnSignup} style={{ cursor: "pointer" }} className="btn" type="submit" value="JOIN" />
                         <div className="validation-message"></div>
                     </div>
                 </div>
@@ -246,6 +283,7 @@ class SignupForm extends Component {
         )
     }
 }
+
 class account extends Component {
     constructor(props) {
         super(props);
@@ -257,7 +295,7 @@ class account extends Component {
     }
     componentDidMount() {
         document.title = "Account";
-        if(this.props.isAuthenticated){
+        if (this.props.isAuthenticated) {
             this.props.history.push('/account/accountdetails/')
         };
 
@@ -267,10 +305,10 @@ class account extends Component {
         return (
             <div className="account-content">
                 <div className="header-tabs-container">
-                    <div  style={{cursor:"pointer"}} className={tab == "login" ? "header-tab-active" : "header-tab"} onClick={() => this.tabChange("login")}>
+                    <div style={{ cursor: "pointer" }} className={tab == "login" ? "header-tab-active" : "header-tab"} onClick={() => this.tabChange("login")}>
                         Log In
                     </div>
-                    <div  style={{cursor:"pointer"}} className={tab == "signup" ? "header-tab-active" : "header-tab"} onClick={() => this.tabChange("signup")}>
+                    <div style={{ cursor: "pointer" }} className={tab == "signup" ? "header-tab-active" : "header-tab"} onClick={() => this.tabChange("signup")}>
                         Sign Up
                     </div>
 
