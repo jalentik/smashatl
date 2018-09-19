@@ -139,7 +139,7 @@ const GAMap = compose(
             >
                 <input
                     type="text"
-                    placeholder="Customized your placeholder"
+                    placeholder="Enter a location"
                     style={{
                         boxSizing: `border-box`,
                         border: `1px solid transparent`,
@@ -183,10 +183,10 @@ const GAMap = compose(
                                     <p > {user.AppPlaystyle ? user.AppPlaystyle.StyleName : ""} </p>
                                 </div>
 
-                                <div style={{alignContent: "center"}} className="player-card-body-column">
+                                <div style={{alignContent: "center", justifyContent:"space-evenly"}} className="player-card-body-column">
                                     <img hidden={!user.AppCharacter} style={{ height: "35px", width: "35px", margin:"0 auto" }} src={user.AppCharacter ? require("../../Media/Icons/" + props.filterOptions.characters[user.AppCharacter.CharacterId - 1].thumbnail) : ""} />
                                     <p className="main">{user.AppCharacter ? user.AppCharacter.CharacterName : ""}</p>
-                                    <img hidden={!user.AppCharacter1} style={{ height: "35px", width: "35px", margin:"0 auto", marginTop: "10px" }} src={user.AppCharacter1 ? require("../../Media/Icons/" + props.filterOptions.characters[user.AppCharacter1.CharacterId - 1].thumbnail) : ""} />
+                                    <img hidden={!user.AppCharacter1} style={{ height: "35px", width: "35px", margin:"0 auto", marginTop: "10px", marginBottom: "-10px" }} src={user.AppCharacter1 ? require("../../Media/Icons/" + props.filterOptions.characters[user.AppCharacter1.CharacterId - 1].thumbnail) : ""} />
                                     <p className="secondary">{user.AppCharacter1 ? user.AppCharacter1.CharacterName : ""}</p>
                                 </div>
 
@@ -425,8 +425,9 @@ class smashmap extends Component {
                         defaultCenter={centerPosition}
                         radius={selectedRadius}
                         filterOptions={filterOptions}
-
                     >
+
+                    
                     </GAMap>
 
 
