@@ -343,11 +343,11 @@ class AccountSettings extends Component {
                         <input onChange={this.twitChange} value={twit} type="text" placeholder="www.twitter.com/mytwittername" />
 
                          <div className='social-network-title'><img src={twtchicon} style={{ cursor: "pointer" }} className='social-image small' /><span id="title">Twitch</span></div>
-                        <input onChange={this.twtchChange} value={twtch} type="text" placeholder="www.twitch.tv/mytwitchname" />
+                        <input onChange={this.twtchChange} value={twtch} type="text" placeholder="www.twitch.tv/mytwitchname" style={{marginBottom: "30px"}} />
                  
+                        <a onClick={this.saveChanges} className="save-changes" style={{ cursor: "pointer" }}>Save Changes</a>
 
                     </MobileView>
-                    <a onClick={this.saveChanges} className="save-changes" style={{ cursor: "pointer" }}>Save Changes</a>
 
             </div>
         )
