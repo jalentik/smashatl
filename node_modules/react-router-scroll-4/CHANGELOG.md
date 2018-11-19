@@ -1,3 +1,9 @@
+v1.0.0-beta.2 - 2018-08-01
+--------------------------------------
+
+- Allow overriding the scroll behavior class
+- Fix error: QuotaExceededError (Safari incognito mode (> 11) / Opera Mini)
+
 v1.0.0-beta.1 - 2017-10-24
 --------------------------------------
 

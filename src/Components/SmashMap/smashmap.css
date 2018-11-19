@@ -1,3 +1,5 @@
+@media screen and (min-width: 601px){
+
 .chk-events-wrapper{
     width: 32px;
     height:32px;
@@ -78,12 +80,19 @@
 .player-card-body-column p, .player-card-body-column a{
     font-family: 'Quicksand', sans-serif;
     font-weight: 300;
+    font-size:15px;
+    padding:0;
+    margin: 0;
+    text-decoration: none;  
+}
+.player-card-body-column p.small, .player-card-body-column a.small{
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 300;
     font-size:10px;
     padding:0;
     margin: 0;
     text-decoration: none;  
 }
-
 .player-card-body-column p, .player-card-body-column a img{
     width: 10px;
     height:10px;
@@ -189,3 +198,422 @@
 .action-container a.refresh-users:hover{
     background-color: rgb(196, 185, 42)
  }
+
+ .googlemap-element{
+    height: 100%; 
+    min-width: 300px; 
+    max-width: 700px;
+    transition: all ease-in-out 1s;
+ }
+
+ .googlemap-container{
+    height: 500px;
+     display: flex;
+      flex-direction: row;
+       flex: 1;
+        transition: all ease-in-out 1s;
+ }
+}
+@media screen and (max-width: 600px){
+    .googlemap{
+        display: flex;
+        flex-direction: column;
+        width:100vw;
+
+    }
+    .googlemap-container{
+        flex-direction: column;
+        width:100%;
+        display: flex;
+        height:90vh;
+    }
+    .googlemap-element{
+        height: 50%;
+        width: 100vw;
+    }
+    .chk-events-wrapper{
+        width: 32px;
+        height:32px;
+        
+    }
+    
+    .events-filter-toggle{
+        display: flex;
+        flex: 1;
+        flex-direction: row;
+    
+    }
+    .events-filter-toggle img{
+        margin-left: 25px;
+    }
+    
+    .maps-search {
+        -webkit-transition: all 0.30s ease-in-out;
+        -moz-transition: all 0.30s ease-in-out;
+        -ms-transition: all 0.30s ease-in-out;
+        -o-transition: all 0.30s ease-in-out;
+        outline: none;
+        padding: 3px 0px 3px 3px;
+        margin: 5px 1px 3px 0px;
+        border-top:0px;
+        border-left: 0px;
+        border-right:0px;
+        border-bottom: 1px solid rgb(207, 207, 207);
+        font-size: 12px;
+      }
+       
+      
+    .maps-search:focus {
+        box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+        padding: 3px 0px 3px 3px;
+        margin: 5px 1px 3px 0px;
+        border: 1px solid rgba(81, 203, 238, 1);
+      }
+    
+      .map{
+          height:500px;
+            width:500px;
+      }
+    
+    .player-card{
+        flex: 1;
+        background: #fff;
+        max-height:50px;
+        display: flex;
+        flex-direction: row;
+        border-bottom:1px solid #ddd;
+    }
+    
+    
+    .player-card:nth-child(even){
+        background:whitesmoke;
+    }
+    
+    
+    .player-card-title{ 
+        font-size: 20px;
+        font-family: 'Quicksand', sans-serif;
+        font-weight: 700;
+        display: flex;
+        flex-direction: column;
+        padding: 0px 10px;
+        width: 45%;
+        
+        }
+    .player-card-title p{
+        margin: 0;
+        padding: 0;
+        margin-bottom:-5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+    .player-card-body{
+        display: flex;
+        flex: 1;
+        flex-direction: row;
+        border-left: 1px solid #ddd;
+        }
+    
+    .player-card-body-column p, .player-card-body-column a{
+        font-family: 'Quicksand', sans-serif;
+        font-weight: 300;
+        font-size:15px;
+        padding:0;
+        margin: 0;
+        text-decoration: none;  
+    }
+    .player-card-body-column p.small, .player-card-body-column a.small{
+        font-family: 'Quicksand', sans-serif;
+        font-weight: 300;
+        font-size:10px;
+        padding:0;
+        margin: 0;
+        text-decoration: none;  
+    }
+     .player-card-body-column a img{
+        width: 15px;
+        height:15px;
+        background: transparent;
+    }
+    .player-card-body-column p.main{
+        font-weight: 500;
+        width: 100%;
+        text-align: center;
+    }
+    .player-card-body-column p.secondary{
+        font-weight:500;
+        color:#5c5c5c;
+        width: 100%;
+        text-align: center;
+    }
+    .player-card-body-column{
+        display: flex;
+        flex: 1;
+        flex-direction: row;
+    }
+    
+    .player-card-body-column:first-child{
+        margin-left: -5px;
+    }
+    
+    .player-card-body-column:not(:last-child){
+        padding-right:5px;
+    }
+    .player-card-footer{
+        padding-bottom: 10px;
+    }
+    
+    .justify-center{
+        justify-content: center;
+    }
+    
+    .justify-space-evenly{
+        justify-content:space-evenly;
+    }
+    
+    .justify-space-between{
+        justify-content: space-between;
+    }
+    .justify-end{
+        justify-content:end;
+    }
+    
+    .flex-row{
+        display: flex;
+        flex-direction: row;
+    }
+    
+    .flex-column{
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .action-container{
+        display: flex;
+        justify-content: space-evenly;
+        margin-bottom: 10px;
+        background-color:transparent;
+    }
+    .action-container a{
+        -webkit-transition: all 0.4s ease-in-out;
+        -moz-transition: all 0.4s ease-in-out;
+        -ms-transition: all 0.4s ease-in-out;
+        -o-transition: all 0.4s ease-in-out;
+        transition: all 0.4s ease-in-out;
+        background-color:transparent;
+        border-radius: 50%;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        padding:15px;
+        cursor: pointer;
+    }
+    .action-container a img{
+        -webkit-transition: all 0.4s ease-in-out;
+        -moz-transition: all 0.4s ease-in-out;
+        -ms-transition: all 0.4s ease-in-out;
+        -o-transition: all 0.4s ease-in-out;
+        transition: all 0.4s ease-in-out;
+        background-color: transparent;
+        height:25px;
+        width:25px;
+    }
+    
+    .action-container a:hover img{
+        -webkit-filter: brightness(0) invert(1);
+        filter: brightness(0) invert(1);
+    
+    }
+    
+    .action-container a.clear-filter:hover{
+       background-color: rgb(196, 52, 42)
+    }
+    
+    .action-container a.refresh-users:hover{
+        background-color: rgb(196, 185, 42)
+     }
+     .mobile-map-filter{
+         width:95%;
+         margin: 0 auto;
+         margin-top: 10px;
+         background: rgba(221, 221, 221, 0.26);
+         border: 1px solid #ddd;
+         margin-bottom: 10px;
+         text-align: center;
+         padding: 10px 0px;
+     }
+     .extra-small{
+         width:20px;
+         height: 20px;
+     }
+     .btn-filter{
+        color: #000;
+        text-align: center;
+        justify-content: center;
+     }
+     .modal-background{
+         position:absolute;
+         background: #00000075;
+         top: 0;
+         left: 0;
+         width: 100vw;
+         height: 100vh;
+         z-index: 50000;
+        transition: 1s ease-in-out all;
+        -o-transition: 1s ease-in-out all;
+        -webkit-transition: 1s ease-in-out all;
+        -moz-transition: 1s ease-in-out all;
+     }
+
+     .modal{
+        position: absolute;
+        top: 0;
+        left:0;
+        z-index: 50001;
+        transition: 1s ease-in-out all;
+        -o-transition: 1s ease-in-out all;
+        -webkit-transition: 1s ease-in-out all;
+        -moz-transition: 1s ease-in-out all;
+     }
+
+     .filter-modal{
+         height:60vh;
+         width:100vw;
+         background: #fff;
+         display: flex;
+         flex-direction: column;
+         transition: 1s ease-in-out all;
+         -o-transition: 1s ease-in-out all;
+         -webkit-transition: 1s ease-in-out all;
+         -moz-transition: 1s ease-in-out all;
+         overflow: visible;
+     }
+
+     .filter-container{
+         flex: 10;
+         flex-direction: column;
+         display: flex;
+     }
+     .filter-item-group{
+        padding: 0px 10px;
+     }
+     .filter-go{
+        color: #fff;
+        background-color: #5cb85c;
+        border-color: #4cae4c;
+        font-size: 15px;
+        transition: 1s ease-in-out all;
+        -o-transition: 1s ease-in-out all;
+        -webkit-transition: 1s ease-in-out all;
+        -moz-transition: 1s ease-in-out all;
+    }
+
+    .filter-actions{
+        display: flex;
+        justify-content: space-evenly;
+        flex: 1;
+        margin-bottom: 5px;
+    }
+
+    .btn-primary{
+        color: #000;
+        background: #fff;
+        border: 0;
+    }
+
+    .btn{
+        display: flex;   
+        padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;     
+    }
+
+    .btn p{
+        padding:0;
+        margin:0;
+        margin-left: 5px;
+    }
+
+    a{
+        text-decoration: none;
+    }
+    .filter-window{
+        transition: all 300ms ease-in-out;
+        position: absolute;
+        width:100vw;
+        height: 100vh;
+    }
+      .filter-window-enter {
+         top: -100vh;
+      }
+      .filter-window-enter-active {
+        top: 0;
+        left:0;
+        transition: all 300ms ease-in-out;
+        
+      }
+      .filter-window-exit {
+        top: 0;
+      }
+      .filter-window-exit-active {
+        top:-100vh;
+        transition: all 300ms ease-in-out;
+      }
+
+      .card-item{
+        transition: all 300ms ease-in-out;
+        overflow: hidden;
+    }
+      .card-item-enter {
+        transform: translateY(100%) ;
+      }
+      .card-item-enter-active {
+        transform: translateY(0%) ;
+        transition: all 300ms ease-in-out;
+        
+      }
+      .card-item-exit {
+        transform: translateY(0%)
+      }
+      .card-item-exit-active {
+        transform: translateY(100%) ;
+        transition: all 300ms ease-in-out;
+      }
+      .player-card-list{
+       overflow-y: auto;
+       overflow-x: hidden;  
+       width:100vw;  
+       max-height:40vh;  
+       margin-bottom:100px    
+      }
+      .mobile-google-map{
+      }
+
+      .action-box{
+        transition: .3s all ease-in-out;
+        -o-transition: .3s all ease-in-out;
+        -moz-transition: .3s all ease-in-out;
+        -webkit-transition: .3s all ease-in-out;
+    }
+
+    .action-box:active{
+        background: #c4c4c4;
+    }
+    }

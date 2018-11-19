@@ -24,16 +24,26 @@ import faq from './Components/Faq/faq';
 import accountdetails from './Components/Account/AccountDetails/accountdetails.js'
 import AppliedRoute from './Components/AppliedRoute.js'
 import AccountSettings from './Components/Account/AccountDetails/accountdetails.js'
-
+import {
+  BrowserView,
+  MobileView,
+  isBrowser,
+  isMobile
+} from "react-device-detect";
 const cookies = new Cookies();
-
+var homeIco = require('./Media/home.png');
+var userIco = require('./Media/user.svg');
+var questionIco = require('./Media/question-mark.svg');
+var mapIco = require('./Media/map.svg');
+var calendarIco = require('./Media/calendar.svg');
 class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isAuthenticated: cookies.get('isAuthenticated')|| false,
+      isAuthenticated: cookies.get('isAuthenticated') || false,
       userDetails: cookies.get('userDetails') || {
+        appuserid: -1,
         id: -1,
         tag: "",
         main: -1,
@@ -43,7 +53,8 @@ class App extends Component {
         twitterurl: "",
         twitchurl: "",
         facebookurl: "",
-        playstyle: -1
+        playstyle: -1,
+        roles: ""
       }
 
     }
@@ -52,16 +63,16 @@ class App extends Component {
   setUserDetails = userDetails => {
     this.setState({ userDetails: userDetails })
     cookies.set('userDetails', userDetails, { path: '/' });
-  
+
   }
   userHasAuthenticated = authenticated => {
     this.setState({ isAuthenticated: authenticated });
-    cookies.set('isAuthenticated',authenticated, { path: '/'} )
+    cookies.set('isAuthenticated', authenticated, { path: '/' })
   }
-  clearUser(){
+  clearUser() {
     cookies.remove('isAuthenticated');
     cookies.remove('userDetails');
-    this.setState({userDetails:{}});
+    this.setState({ userDetails: {} });
   }
   render() {
     const childProps = {
@@ -76,39 +87,120 @@ class App extends Component {
         <Route
           render={({ location }) => (
             <div id="app" className="app" >
-              <div className="header" ref='header'>
-                <div className="header-left">
-                  <div className="nav-container">
+              <BrowserView>
+               <div>
+                 SmashATL Desktop Coming Soon.
+                 </div>
+               {/*
+                <div className="header" ref='header'>
+                  <div className="header-left">
+                    <div className="nav-container">
 
-                    <label className="nav-item">
-                      <NavLink exact to="/">Home</NavLink>
-                    </label>
-                    <div className="nav-item">
-                      <NavLink to="/events">Events</NavLink>
+                      <label className="nav-item">
+                        <NavLink exact to="/">Home</NavLink>
+                      </label>
+                      <div className="nav-item">
+                        <NavLink to="/events">Events</NavLink>
+
+                      </div>
+                      <div className="nav-item">
+                        <NavLink to="/smashmap">Smash Map</NavLink>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="header-middle">
+
+                    <img src={logo3} className="logo" />
+                  </div>
+                  <div className="header-right">
+
+                    <div className="nav-container">
+
+                      <div className="nav-item">
+                        <NavLink to="/faq"> FAQ</NavLink>
+                      </div>
+                      <div className="nav-item">
+                        <NavLink to="/account">Account</NavLink>
+                      </div>
 
                     </div>
-                    <div className="nav-item">
-                      <NavLink to="/smashmap">Smash Map</NavLink>
+                    <div className="contact">
+                      <p>telephone: (770)313-6286</p>
+                      <a href="">email: jalen.underwood@outlook.com</a>
+                      <div style={{ display: 'flex', flexDirection: 'row', maxHeight: '50px', paddingTop: '10px' }}>
+                        <img src={fb} className='social-image' />
+                        <img src={twit} className='social-image' />
+                        <img src={twtch} className='social-image' />
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="header-middle">
 
-                  <img src={logo3} className="logo" />
-                </div>
-                <div className="header-right">
+                <div className="content">
 
-                  <div className="nav-container">
+                  <div className="content-main" >
+                    <TransitionGroup>
+                      <CSSTransition in key={location.key} classNames="page-transition" timeout={500}>
+                        <Switch location={location}>
 
-                    <div className="nav-item">
-                      <NavLink to="/faq"> FAQ</NavLink>
-                    </div>
-                    <div className="nav-item">
-                      <NavLink to="/account">Account</NavLink>
-                    </div>
+                          <AppliedRoute path="/" exact component={home} props={childProps} />
+                          <AppliedRoute exact path="/events" component={events} props={childProps} />
+                          <AppliedRoute exact path="/smashmap" component={smashmap} props={childProps} />
+                          <AppliedRoute exact path="/faq" component={faq} props={childProps} />
+                          <AppliedRoute exact path="/account" component={account} props={childProps} />
+                          <AppliedRoute exact path="/account/accountdetails" component={accountdetails} props={childProps} />
+                          <AppliedRoute exact path="/account/accountdetails/accountsettings" component={AccountSettings} props={childProps} />
 
+                          <Route render={() => <div>Not Found</div>} />
+
+                        </Switch>
+                      </CSSTransition>
+                    </TransitionGroup>
                   </div>
-                  <div className="contact">
+
+                </div>
+               */}
+              </BrowserView>
+              <MobileView>
+                <div className="header" ref='header'>
+                  <div className="header-left">
+                  <div className="nav-container">
+                      <img src={logo3} className="logo" />
+
+                      <div className="nav-item">
+                        <NavLink exact to="/">
+                          <img alt="test" src={homeIco} />
+                        </NavLink>
+                      </div>
+                      <div className="nav-item">
+                        <NavLink to="/events">
+                          <img src={calendarIco} />
+
+                        </NavLink>
+
+                      </div>
+
+                      <div className="nav-item">
+                        <NavLink to="/smashmap">
+                          <img src={mapIco} />
+
+                        </NavLink>
+                      </div>
+                      <div className="nav-item">
+                        <NavLink to="/faq">
+                          <img src={questionIco} />
+
+                        </NavLink>
+                      </div>
+                      <div className="nav-item">
+                        <NavLink to="/account">
+                          <img src={userIco} />
+
+                        </NavLink>
+                      </div>
+                    </div>
+
+                    {/*} <div className="contact">
                     <p>telephone: (770)313-6286</p>
                     <a href="">email: jalen.underwood@outlook.com</a>
                     <div style={{ display: 'flex', flexDirection: 'row', maxHeight: '50px', paddingTop: '10px' }}>
@@ -116,37 +208,40 @@ class App extends Component {
                       <img src={twit} className='social-image' />
                       <img src={twtch} className='social-image' />
                     </div>
+          </div>*/}
                   </div>
                 </div>
-              </div>
 
-              <div className="content">
+                <div className="content">
 
-                <div className="content-main" >
-                  <TransitionGroup>
-                    <CSSTransition in key={location.key} classNames="page-transition" timeout={500}>
-                      <Switch location={location}>
+                  <div className="content-main" >
+                    <TransitionGroup>
+                      <CSSTransition in key={location.key} classNames="page-transition" timeout={500}>
+                        <Switch location={location}>
 
-                        <AppliedRoute path="/" exact component={home} props={childProps} />
-                        <AppliedRoute exact path="/events" component={events} props={childProps} />
-                        <AppliedRoute exact path="/smashmap" component={smashmap} props={childProps} />
-                        <AppliedRoute exact path="/faq" component={faq} props={childProps} />
-                        <AppliedRoute exact path="/account" component={account} props={childProps} />
-                        <AppliedRoute exact path="/account/accountdetails" component={accountdetails} props={childProps} />
-                        <AppliedRoute exact path="/account/accountdetails/accountsettings" component={AccountSettings} props={childProps} />
+                          <AppliedRoute path="/" exact component={home} props={childProps} />
+                          <AppliedRoute exact path="/events" component={events} props={childProps} />
+                          <AppliedRoute exact path="/smashmap" component={smashmap} props={childProps} />
+                          <AppliedRoute exact path="/faq" component={faq} props={childProps} />
+                          <AppliedRoute exact path="/account" component={account} props={childProps} />
+                          <AppliedRoute exact path="/account/accountdetails" component={accountdetails} props={childProps} />
+                          <AppliedRoute exact path="/account/accountdetails/accountsettings" component={AccountSettings} props={childProps} />
 
-                        <Route render={() => <div>Not Found</div>} />
+                          <Route render={() => <div>Not Found</div>} />
 
-                      </Switch>
-                    </CSSTransition>
-                  </TransitionGroup>
+                        </Switch>
+                      </CSSTransition>
+                    </TransitionGroup>
+                  </div>
+
                 </div>
+              </MobileView>
 
-              </div>
             </div>
 
           )}
         />
+
       </BrowserRouter>
 
     )

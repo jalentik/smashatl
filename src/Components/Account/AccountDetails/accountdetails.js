@@ -6,7 +6,15 @@ import 'react-select/dist/react-select.css';
 import filterOptions from "../../SmashMap/filterOptions";
 import PropTypes from 'prop-types';
 import Cookies from 'universal-cookie';
-
+import {
+    BrowserView,
+    MobileView,
+    isBrowser,
+    isMobile
+} from "react-device-detect";
+import fbicon from '../../../Media/fb.png';
+import twiticon from '../../../Media/twit.png';
+import twtchicon from '../../../Media/twitch.png';
 var check = require('../../../Media/check-symbol.png')
 var network = require('../../../Media/network.svg')
 var emptyCheck = require('../../../Media/check-box-empty.png')
@@ -141,8 +149,12 @@ class AccountSettings extends Component {
         var twtch = !(this.state.twtch.indexOf("www.") > 0) && !(this.state.twtch.indexOf("http://") > 0) && this.state.twtch ? "http://www." + this.state.twtch : this.state.twtch;
         var fb = !(this.state.fb.indexOf("www.") > 0) && !(this.state.fb.indexOf("http://") > 0) && this.state.fb ? "http://www." + this.state.fb : this.state.fb;
         var twit = !(this.state.twit.indexOf("www.") > 0) && !(this.state.twit.indexOf("http://" > 0) && this.state.twit > 0) ? "http://www." + this.state.twit : this.state.twit;
+        if(!twtch.indexOf('twitch.tv') > 0 && twtch.length > 0){alert('Please use a valid twitch address.');return;}
+        if(!twit.indexOf('twitter.com') > 0 && twit.length > 0){alert('Please use a valid twitter address.');return;}
+        if(!twtch.indexOf('facebook.com') > 0 && twtch.length > 0){alert('Please use a valid facebook address.');return;}
+
         if (!this.state.selectedMain || !this.state.tag || !this.state.selectedPlaystyle) { alert('A main, tag, and playstyle are required.'); return; }
-        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appuserdetails/savechanges",{
+        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appuserdetails/savechanges", {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -212,6 +224,7 @@ class AccountSettings extends Component {
 
         return (
             <div className="account-settings-content">
+            <BrowserView>
                 <div className="public-form">
                     <div className="public-form-left">
                         <p id="title">Playstyle</p>
@@ -277,20 +290,90 @@ class AccountSettings extends Component {
                     </div>
                 </div>
                 <a onClick={this.saveChanges} className="save-changes" style={{ cursor: "pointer" }}>Save Changes</a>
+                </BrowserView>
+                <MobileView viewClassName="mobile-view-details">
+                <h3>General</h3>
+                <p id="title">Tag</p>
+                        <input onChange={this.tagChange} value={tag} type="text" placeholder="My tag" />
+                <p id="title">Playstyle</p>
+                        <Select
+                            className="character-select"
+                            placeholder="Select Playstyle"
+                            closeOnSelect={true}
+                            onChange={this.playstyleChange}
+                            options={playstyles}
+                            labelKey={"playName"}
+                            valueKey={"playId"}
+                            value={selectedPlaystyle}
+                        />
+
+                        <p id="title">Main</p>
+                        <Select
+                            optionComponent={DropdownOptions}
+                            className="character-select"
+                            placeholder="Select your main"
+                            closeOnSelect={true}
+                            onChange={this.mainSelectionChanged}
+                            options={characters}
+                            labelKey={"charName"}
+                            valueKey={"charId"}
+                            value={selectedMain}
+                            optionRenderer={optionRenderer}
+                        />
+                        <p id="title">Secondary</p>
+                        <Select
+                            optionComponent={DropdownOptions}
+                            className="character-select"
+                            placeholder="Select your secondary"
+                            closeOnSelect={true}
+                            onChange={this.secondarySelectionChanged}
+                            options={characters}
+                            labelKey={"charName"}
+                            valueKey={"charId"}
+                            value={selectedSecondary}
+                            optionRenderer={optionRenderer}
+                        />
+
+                        <h3>Social Networks</h3>
+                        <div className='social-network-title'><img src={fbicon} style={{ cursor: "pointer" }} className='social-image small' /><span id="title"> Facebook</span></div>
+                        <input onChange={this.fbChange} value={fb} type="text" placeholder="www.facebook.com/myfbname" />
+
+
+                         <div className='social-network-title'><img src={twiticon} style={{ cursor: "pointer" }} className='social-image small' /><span id="title"> Twitter</span></div>
+                        <input onChange={this.twitChange} value={twit} type="text" placeholder="www.twitter.com/mytwittername" />
+
+                         <div className='social-network-title'><img src={twtchicon} style={{ cursor: "pointer" }} className='social-image small' /><span id="title">Twitch</span></div>
+                        <input onChange={this.twtchChange} value={twtch} type="text" placeholder="www.twitch.tv/mytwitchname" />
+                 
+
+                    </MobileView>
+                    <a onClick={this.saveChanges} className="save-changes" style={{ cursor: "pointer" }}>Save Changes</a>
+
             </div>
         )
     }
 }
 class accounthome extends Component {
     render() {
-        return (
-            <div style={{ width: "50%" }}>
-                <h2>
-                    Welcome to your account home. If this is your first time logging in, you should head to account settings via the cog icon to the left and update your account details.
-                    Later on, this panel will be utilized as a dashboard to be displayed on login as a summary of current user experiences and updates.
-                  </h2>
-            </div>
-        )
+        if(isMobile){
+            return (
+            
+                <div className="home-text">
+                    <h2>
+                        Welcome to your account home. If this is your first time logging in, you should head to account settings via the cog icon below and update your account details.
+                        Later on, this panel will be utilized as a dashboard to be displayed on login as a summary of current user experiences and updates.
+                      </h2>
+                </div>
+            )
+        } else{
+            <div className="home-text">
+            <h2>
+                Welcome to your account home. If this is your first time logging in, you should head to account settings via the cog icon to the left and update your account details.
+                Later on, this panel will be utilized as a dashboard to be displayed on login as a summary of current user experiences and updates.
+              </h2>
+        </div>
+        }
+       
     }
 }
 class accountdetails extends Component {
@@ -318,39 +401,77 @@ class accountdetails extends Component {
         return (
             <Router>
                 <div className="account-detail-content">
-                    <ul className="account-menu-items">
-                        <li id="home-link">
-                            <Link to={{
-                                pathname: '/Account/AccountDetails/',
-                                state: this.props.userDetails,
-                                setUserDetails: this.props.setUserDetails,
-                                
-                            }}>
-                                <img  className={"small"} src={home} />
-                            </Link>
-                        </li>
-                        <li><img className={"disabled small"} src={network} /></li>
-                        <li id="settings-link"  onClick={setViewing}>
+                    <BrowserView>
+                        <ul className="account-menu-items">
+                            <li id="home-link">
+                                <Link to={{
+                                    pathname: '/Account/AccountDetails/',
+                                    state: this.props.userDetails,
+                                    setUserDetails: this.props.setUserDetails,
 
-                            <Link to={{
-                                pathname: '/Account/AccountDetails/AccountSettings',
-                                state: this.props.userDetails,
-                                setUserDetails: this.props.setUserDetails
-                            }}>
-                                <img className={"small"} src={settings} />
+                                }}>
+                                    <img className={"small"} src={home} />
+                                </Link>
+                            </li>
+                            <li><img className={"disabled small"} src={network} /></li>
+                            <li id="settings-link" onClick={setViewing}>
 
-                            </Link>
+                                <Link to={{
+                                    pathname: '/Account/AccountDetails/AccountSettings',
+                                    state: this.props.userDetails,
+                                    setUserDetails: this.props.setUserDetails
+                                }}>
+                                    <img className={"small"} src={settings} />
 
-                        </li>
-                        <li><img className={"disabled small"} src={videoplayer} /></li>
-                        <li id="logout-link"><a  style={{ cursor: "pointer" }} onClick={this.LogOutUser}><img className={"small"} src={logout} /></a></li>
+                                </Link>
 
-                    </ul>
+                            </li>
+                            <li><img className={"disabled small"} src={videoplayer} /></li>
+                            <li id="logout-link"><a style={{ cursor: "pointer" }} onClick={this.LogOutUser}><img className={"small"} src={logout} /></a></li>
 
-                    <div style={{ maxHeight: "800px", width: "100%", overflowY: "auto", justifyContent: "center", display: "flex" }}>
-                        <Route exact path="/Account/AccountDetails/AccountSettings" component={AccountSettings} />
-                        <Route exact path="/Account/AccountDetails/" component={accounthome} />
-                    </div>
+                        </ul>
+
+                        <div style={{ maxHeight: "800px", width: "100%", overflowY: "auto", justifyContent: "center", display: "flex" }}>
+                            <Route exact path="/Account/AccountDetails/AccountSettings" component={AccountSettings} />
+                            <Route exact path="/Account/AccountDetails/" component={accounthome} />
+                        </div>
+                    </BrowserView>
+                    <MobileView>
+                    
+
+                        <div style={{ width: "100vw", paddingBottom:"10vh", overflowY: "auto", justifyContent: "center", display: "flex" }}>
+                            <Route exact path="/Account/AccountDetails/AccountSettings" component={AccountSettings} />
+                            <Route exact path="/Account/AccountDetails/" component={accounthome} />
+                        </div>
+                        <ul className="account-menu-items">
+                            <li id="home-link">
+                                <Link to={{
+                                    pathname: '/Account/AccountDetails/',
+                                    state: this.props.userDetails,
+                                    setUserDetails: this.props.setUserDetails,
+
+                                }}>
+                                    <img className={"small"} src={home} />
+                                </Link>
+                            </li>
+                            <li><img className={"disabled small"} src={network} /></li>
+                            <li id="settings-link" onClick={setViewing}>
+
+                                <Link to={{
+                                    pathname: '/Account/AccountDetails/AccountSettings',
+                                    state: this.props.userDetails,
+                                    setUserDetails: this.props.setUserDetails
+                                }}>
+                                    <img className={"small"} src={settings} />
+
+                                </Link>
+
+                            </li>
+                            <li><img className={"disabled small"} src={videoplayer} /></li>
+                            <li id="logout-link"><a style={{ cursor: "pointer" }} onClick={this.LogOutUser}><img className={"small"} src={logout} /></a></li>
+
+                        </ul>
+                        </MobileView>
                 </div>
             </Router>
         )
