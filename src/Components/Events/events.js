@@ -10,6 +10,8 @@ import {
 } from "react-device-detect";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
+import ReactGA from 'react-ga';
+
 var bnb = require('../../Media/bnb.jpg');
 
 
@@ -22,13 +24,14 @@ class event extends Component {
         this.newEventHandler = this.newEventHandler.bind(this);
     }
     componentDidMount() {
+        ReactGA.pageview('/events');
         document.title = "Events";
         this.refreshEvents();
     }
     toggleShowNewEvent() {
         this.setState({ showNewEvent: !this.state.showNewEvent })
     }
-    newEventHandler(){
+    newEventHandler() {
         this.toggleShowNewEvent();
         this.refreshEvents();
     }
@@ -63,8 +66,12 @@ class event extends Component {
         const events = this.state.events;
         let newEventButton;
         if (this.props.userDetails) {
-            if (this.props.isAuthenticated && (this.props.userDetails.roles.indexOf("App.Administrator") > 0 || this.props.userDetails.roles.indexOf("App.Owner") > 0)) {
-                newEventButton = <a className="new-event-btn" onClick={this.toggleShowNewEvent}><i className="fa fa-plus"></i>New Event</a>
+            if (this.props.isAuthenticated) {
+                if (this.props.userDetails.roles) {
+                    if (this.props.userDetails.roles.indexOf("App.Administrator") > 0 || this.props.userDetails.roles.indexOf("App.Owner") > 0) {
+                        newEventButton = <a className="new-event-btn" onClick={this.toggleShowNewEvent}><i className="fa fa-plus"></i>New Event</a>
+                    }
+                }
             }
         }
         const selectedEventIndex = this.state.selectedEventIndex;
@@ -91,12 +98,13 @@ class event extends Component {
                     }
                 </CSSTransition>
                 <h1>Upcoming Events</h1>
-                <h3>Tap the event for more details.</h3>
+                <h3>Double tap the event for more details.</h3>
                 <Carousel showArrows={true} onChange={this.onCarouselChange} selectedItem={selectedEventIndex} onClickItem={this.onClickItem} onClickThumb={this.onClickThumb}>
-                  {listItems}
+                    {listItems}
                 </Carousel>
                 <MobileView>
                     {newEventButton}
+                    
                 </MobileView>
             </div>
 

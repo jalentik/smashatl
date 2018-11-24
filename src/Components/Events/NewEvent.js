@@ -8,6 +8,8 @@ import {
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import statesRepo from '../States';
 import './events.css';
+import ReactGA from 'react-ga';
+
 class NewEvent extends Component {
     constructor(props) {
         super(props);
@@ -71,6 +73,9 @@ class NewEvent extends Component {
         this.setupDiscountLimitChange = this.setupDiscountLimitChange.bind(this);
         this.submitForm = this.submitForm.bind(this);
         this.postSubmitHandler = this.props.postSubmitHandler.bind(this);
+    }
+    componentDidMount(){
+        ReactGA.pageview('/events/newevent');
     }
     nameChange(e) {
         this.setState({ name: e.target.value });
@@ -402,7 +407,7 @@ class NewEvent extends Component {
                                     <input onChange={this.postalCodeChange} value={postalCode} type="text" placeholder="12345" />
                                 </div>
 
-                                <input type="submit" value="Submit" />
+                                <input type="submit" value="Submit" style={{marginBottom: "30px"}} />
                             </form>
 
                         </div>

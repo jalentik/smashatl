@@ -1,4 +1,4 @@
-@media screen and (min-width: 601px){
+/*@media screen and (min-width: 601px){
 
 .chk-events-wrapper{
     width: 32px;
@@ -213,8 +213,10 @@
        flex: 1;
         transition: all ease-in-out 1s;
  }
-}
-@media screen and (max-width: 600px){
+}*/
+
+
+@media screen and (min-width: 320px){
     .googlemap{
         display: flex;
         flex-direction: column;
@@ -479,7 +481,7 @@
      }
 
      .filter-modal{
-         height:60vh;
+         height:80vh;
          width:100vw;
          background: #fff;
          display: flex;
@@ -508,6 +510,7 @@
         -o-transition: 1s ease-in-out all;
         -webkit-transition: 1s ease-in-out all;
         -moz-transition: 1s ease-in-out all;
+      
     }
 
     .filter-actions{
@@ -516,7 +519,13 @@
         flex: 1;
         margin-bottom: 5px;
     }
-
+    .filter-actions .btn{
+    width: 50vw;
+    text-align: center;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    }
     .btn-primary{
         color: #000;
         background: #fff;
@@ -600,7 +609,7 @@
        overflow-y: auto;
        overflow-x: hidden;  
        width:100vw;  
-       max-height:40vh;  
+       max-height:35vh;  
        margin-bottom:100px    
       }
       .mobile-google-map{
@@ -616,4 +625,42 @@
     .action-box:active{
         background: #c4c4c4;
     }
-    }
+
+      .loading-user-spinner-enter {
+         opacity: 0.01;
+      }
+      .loading-user-spinner-enter-active {
+        opacity: 1.00;
+
+        transition: all 300ms ease-in-out;
+        
+      }
+      .loading-user-spinner-exit {
+        opacity: 1.00;
+      }
+      .loading-user-spinner-exit-active {
+        opacity: 0.01;
+        transition: all 300ms ease-in-out;
+      }
+      .spinner-container{
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+      }
+
+      .spinner-container *{
+          flex: 1;
+        
+      }
+
+      .pull-to-refresh{
+          background: rgba(221, 221, 221, 0.322);
+          width: 100%;
+          padding: 3px;
+          display: flex;
+          justify-content: space-around;
+          align-content: center;
+          height: 5vh;
+      }
+}

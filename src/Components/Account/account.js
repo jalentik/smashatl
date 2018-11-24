@@ -34,6 +34,7 @@ class LoginForm extends Component {
         this.passChanged = this.passChanged.bind(this);
         this.toggleHasError = this.toggleHasError.bind(this);
         this.checkEnterKeyPress = this.checkEnterKeyPress.bind(this);
+        this.toggleFormSubmitting = this.toggleFormSubmitting.bind(this);
     }
     checkEnterKeyPress(e) {
         if (e.key === "Enter") {
@@ -78,22 +79,22 @@ class LoginForm extends Component {
                 })
             })
                 .then(results => {
-                    if (!results.ok) { this.toggleHasError(); throw new Error("Something went wrong.");  }
+                    if (!results.ok) { throw new Error("Something went wrong.");  }
                     else {
                         return results.json();
 
                     }
                 })
                 .then(data => {
+                    this.toggleFormSubmitting();
                     this.props.props.setUserDetails(data)
                     this.props.props.userHasAuthenticated(true);
                     this.props.props.history.push('/account/accountdetails/')
-                    this.toggleFormSubmitting();
                 })
                 .catch(error => {
+                    this.toggleFormSubmitting();
                     this.setState({ errorMsg: "Invalid login credentials." })
                     this.toggleHasError();
-                    this.toggleFormSubmitting();
                 })
 
 
@@ -393,10 +394,13 @@ class account extends Component {
     }
     componentDidMount() {
         document.title = "Account";
+        
+
+    }
+    componentWillMount(){
         if (this.props.isAuthenticated) {
             this.props.history.push('/account/accountdetails/')
         };
-
     }
     render() {
         const tab = this.state.tab;

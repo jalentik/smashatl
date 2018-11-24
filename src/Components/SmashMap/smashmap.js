@@ -20,6 +20,9 @@ import {
     isMobile
 } from "react-device-detect";
 import PropTypes from 'prop-types';
+import ReactPullToRefresh from 'react-pull-to-refresh';
+import ReactGA from 'react-ga';
+
 /* eslint-disable no-undef */
 /* global google */
 const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
@@ -50,6 +53,7 @@ const GAMap = compose(
                 center: {
                     lat: 33.7490, lng: -84.3880
                 },
+                loading: false,
                 usersInBounds: [],
                 onMapMounted: ref => {
                     refs.map = ref;
@@ -174,27 +178,27 @@ const GAMap = compose(
                 <div style={{ display: 'flex', flex: 1, flexDirection: 'column', overflowY: 'scroll', maxHeight: '500px' }}>
                     {props.usersInBounds.map((user) => {
                         return (
-                            <div key={user.AppUserDetail.UserId} className="player-card">
+                            <div key={user.UserId} className="player-card">
                                 <div className="player-card-title justify-space-between">
                                     <div>
-                                        <p>{user.AppUserDetail.Tag}</p>
+                                        <p>{user.Tag}</p>
                                     </div>
                                     <div className="flex-row justify-evenly">
-                                        <a hidden={!user.AppUserDetail.FacebookUrl} href={user.AppUserDetail.FacebookUrl} target="_blank"><img src={fb} style={{ cursor: "pointer" }} className='social-image small' /></a>
-                                        <a hidden={!user.AppUserDetail.TwitterUrl} href={user.AppUserDetail.TwitterUrl} target="_blank"><img src={twit} style={{ cursor: "pointer" }} className='social-image small' /></a>
-                                        <a hidden={!user.AppUserDetail.TwitchUrl} href={user.AppUserDetail.TwitchUrl} target="_blank"><img src={twtch} style={{ cursor: "pointer" }} className='social-image small' /></a>
+                                        <a hidden={!user.FacebookUrl} href={"http://www.facebook.com/" + user.FacebookUrl} target="_blank"><img src={fb} style={{ cursor: "pointer" }} className='social-image small' /></a>
+                                        <a hidden={!user.TwitterUrl} href={"http://www.twitter.com/" + user.TwitterUrl} target="_blank"><img src={twit} style={{ cursor: "pointer" }} className='social-image small' /></a>
+                                        <a hidden={!user.TwitchUrl} href={"http://www.twitch.tv/" + user.TwitchUrl} target="_blank"><img src={twtch} style={{ cursor: "pointer" }} className='social-image small' /></a>
                                     </div>
                                 </div>
                                 <div className="player-card-body">
                                     <div className="player-card-body-column" style={{ justifyContent: 'center' }}>
-                                        <p > {user.AppPlaystyle ? user.AppPlaystyle.StyleName : ""} </p>
+                                        <p > {user.PlaystyleName} </p>
                                     </div>
 
                                     <div style={{ alignContent: "center", justifyContent: "space-evenly" }} className="player-card-body-column">
-                                        <img hidden={!user.AppCharacter} style={{ height: "35px", width: "35px", margin: "0 auto" }} src={user.AppCharacter ? require("../../Media/Icons/" + props.filterOptions.characters[user.AppCharacter.CharacterId - 1].thumbnail) : ""} />
-                                        <p className="small main">{user.AppCharacter ? user.AppCharacter.CharacterName : ""}</p>
-                                        <img hidden={!user.AppCharacter1} style={{ height: "35px", width: "35px", margin: "0 auto", marginTop: "10px", marginBottom: "-10px" }} src={user.AppCharacter1 ? require("../../Media/Icons/" + props.filterOptions.characters[user.AppCharacter1.CharacterId - 1].thumbnail) : ""} />
-                                        <p className="small secondary">{user.AppCharacter1 ? user.AppCharacter1.CharacterName : ""}</p>
+                                        <img hidden={!user.MainId} style={{ height: "35px", width: "35px", margin: "0 auto" }} src={user.MainId ? require("../../Media/Icons/" + props.filterOptions.characters[user.MainId - 1].thumbnail) : ""} />
+                                        <p className="small main">{user.MainId ? user.MainName : ""}</p>
+                                        <img hidden={!user.SecondaryId} style={{ height: "35px", width: "35px", margin: "0 auto", marginTop: "10px", marginBottom: "-10px" }} src={user.SecondaryId ? require("../../Media/Icons/" + props.filterOptions.characters[user.SecondaryId - 1].thumbnail) : ""} />
+                                        <p className="small secondary">{user.SecondaryId ? user.SecondaryName : ""}</p>
                                     </div>
 
                                     <div className="player-card-body-column justify-space-evenly">
@@ -269,51 +273,53 @@ const GAMap = compose(
                     />
 
                 </GoogleMap>
-                <div style={{ overflowY: 'auto'}}>
+                <div style={{ overflowY: 'auto' }}>
                     <div style={{ display: 'flex', flex: 1, flexDirection: 'column', overflowY: 'auto', maxHeight: '500px' }}>
+
                         <TransitionGroup className="player-card-list">
                             {props.usersInBounds.map((user) => {
                                 return (
+
                                     <CSSTransition
-                                        key={user.AppUserDetail.UserId}
+                                        key={user.UserId}
                                         timeout={500}
                                         classNames="card-item"
                                     >
-                                    
-                                        <div className="player-card">
+
+                                        <div key={user.UserId} className="player-card">
                                             <div className="player-card-title">
                                                 <div>
-                                                    <p>{user.AppUserDetail.Tag}</p>
+                                                    <p>{user.Tag}</p>
                                                 </div>
                                                 <div className="flex-row justify-evenly">
-                                                    <a hidden={!user.AppUserDetail.FacebookUrl} href={user.AppUserDetail.FacebookUrl} target="_blank"><img src={fb} style={{ cursor: "pointer" }} className='social-image extra-small' /></a>
-                                                    <a hidden={!user.AppUserDetail.TwitterUrl} href={user.AppUserDetail.TwitterUrl} target="_blank"><img src={twit} style={{ cursor: "pointer" }} className='social-image extra-small' /></a>
-                                                    <a hidden={!user.AppUserDetail.TwitchUrl} href={user.AppUserDetail.TwitchUrl} target="_blank"><img src={twtch} style={{ cursor: "pointer" }} className='social-image extra-small' /></a>
+                                                    <a hidden={!user.FacebookUrl} href={"http://www.facebook.com/" + user.FacebookUrl} target="_blank"><img src={fb} style={{ cursor: "pointer" }} className='social-image extra-small' /></a>
+                                                    <a hidden={!user.TwitterUrl} href={"http://www.twitter.com/" + user.TwitterUrl} target="_blank"><img src={twit} style={{ cursor: "pointer" }} className='social-image extra-small' /></a>
+                                                    <a hidden={!user.TwitchUrl} href={"http://www.twitch.tv/" + user.TwitchUrl} target="_blank"><img src={twtch} style={{ cursor: "pointer" }} className='social-image extra-small' /></a>
                                                 </div>
                                             </div>
                                             <div className="player-card-body">
                                                 <div className="flex-column justify-evenly" style={{ width: '60%' }}>
                                                     <div className="player-card-body-column" style={{ justifyContent: 'center' }}>
-                                                        <p > {user.AppPlaystyle ? user.AppPlaystyle.StyleName : ""} </p>
+                                                        <p> {user.Playstyle} </p>
                                                     </div>
 
                                                     <div style={{ alignContent: "center", justifyContent: "space-evenly", paddingBottom: '10px' }} className="player-card-body-column">
-                                                        <img hidden={!user.AppCharacter} style={{ height: "30px", width: "30px" }} src={user.AppCharacter ? require("../../Media/Icons/" + props.filterOptions.characters[user.AppCharacter.CharacterId - 1].thumbnail) : ""} />
-                                                        <img hidden={!user.AppCharacter1} style={{ height: "30px", width: "30px" }} src={user.AppCharacter1 ? require("../../Media/Icons/" + props.filterOptions.characters[user.AppCharacter1.CharacterId - 1].thumbnail) : ""} />
+                                                        <img hidden={!user.MainId} style={{ height: "30px", width: "30px" }} src={user.MainId ? require("../../Media/Icons/" + props.filterOptions.characters[user.MainId - 1].thumbnail) : ""} />
+                                                        <img hidden={!user.SecondaryId} style={{ height: "30px", width: "30px" }} src={user.SecondaryId ? require("../../Media/Icons/" + props.filterOptions.characters[user.SecondaryId - 1].thumbnail) : ""} />
                                                     </div>
                                                 </div>
                                                 <div className="player-card-body-column justify-center" style={{ paddingTop: '5px', borderLeft: '1px solid #ddd' }}>
-                                                <a className="action-box player-card-body-column justify-space-evenly" onClick={function(){alert('This action is not available right now.')}}>
-                                                    <div className="flex-column">
-                                                        <img src={vid} />
-                                                        <img src={msg} />
+                                                    <a className="action-box player-card-body-column justify-space-evenly" onClick={function () { alert('This action is not available right now.') }}>
+                                                        <div className="flex-column">
+                                                            <img src={vid} />
+                                                            <img src={msg} />
 
-                                                    </div>
-                                                    <div className="flex-column">
-                                                        <img src={iUser} />
-                                                        <img src={report} />
+                                                        </div>
+                                                        <div className="flex-column">
+                                                            <img src={iUser} />
+                                                            <img src={report} />
 
-                                                    </div>
+                                                        </div>
                                                     </a>
                                                 </div>
                                             </div>
@@ -387,7 +393,8 @@ class smashmap extends Component {
         this.state = {
             chkPlayers: false, selectedChars: "", selectedPlaystyle: "", selectedRadius: 32186.9,
             selectedEvents: false, mapUsers: [], mapUsersResults: [], Circle: {},
-            searchQuery: "", centerPosition: { lat: 33.7490, lng: -84.3880 }, showFilter: false
+            searchQuery: "", centerPosition: { lat: 33.7490, lng: -84.3880 }, showFilter: false,
+            isLoading: false
         }
         this.togglePlayersFilter = this.togglePlayersFilter.bind(this);
         this.toggleEventsFilter = this.toggleEventsFilter.bind(this);
@@ -407,7 +414,10 @@ class smashmap extends Component {
 
         this.toggleFilterModal = this.toggleFilterModal.bind(this);
         this.optionRenderer = this.optionRenderer.bind(this);
-
+        this.toggleLoading = this.toggleLoading.bind(this);
+    }
+    toggleLoading() {
+        this.setState({ isLoading: !this.state.isLoading });
     }
     optionRenderer(option) {
         return (
@@ -417,33 +427,41 @@ class smashmap extends Component {
             </div>
         )
     }
-    fetchUsers() {
-        var list = [];
-        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appusers/getappusers")
-            .then(results => {
-                if (!results.ok) {
-                    throw new Error("Something went wrong.")
-                }
-                else {
-                    return results.json();
-                }
-            })
-            .then(dataLocs => {
-                dataLocs.forEach((dloc) => {
-                    var dlStr = dloc.AppLocation.LatLng;
-                    var str = dlStr.split(',');
-                    var lat = str[0];
-                    var lng = str[1];
-                    dloc.lat = lat;
-                    dloc.lng = lng;
+    fetchUsers(force) {
+        var usersData = localStorage.getItem("userdata");
+        if (usersData && !force) {
+            this.setState({ mapUsers: JSON.parse(usersData) }, this.filterUsers)      
+        } else {
+            this.toggleLoading();
+            var list = [];
+            fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appusers/getappusers")
+                .then(results => {
+                    if (!results.ok) {
+                        throw new Error("Something went wrong.")
+                    }
+                    else {
+                        return results.json();
+                    }
                 })
-                this.setState({ mapUsers: dataLocs }, this.filterUsers)
+                .then(dataLocs => {
+                    dataLocs.forEach((dloc) => {
+                        var dlStr = dloc.LatLng;
+                        var str = dlStr.split(',');
+                        var lat = str[0];
+                        var lng = str[1];
+                        dloc.lat = lat;
+                        dloc.lng = lng;
+                    })
+                    localStorage.setItem("userdata", JSON.stringify(dataLocs))
+                    this.setState({ mapUsers: dataLocs }, this.filterUsers)
+                    this.toggleLoading();
 
-            })
-            .catch(error => console.log(error))
+                })
+                .catch(error =>{ console.log(error); this.toggleLoading(); alert('Map data could not be loaded. Please try again later.')})
+        }
     }
     refreshUsers() {
-        this.fetchUsers();
+        this.fetchUsers(true);
     }
     clearFilters() {
         this.setState({
@@ -455,9 +473,7 @@ class smashmap extends Component {
     componentDidMount() {
         document.title = "SmashMap";
         this.fetchUsers();
-
-
-
+        ReactGA.pageview('/smashmap');
     }
     filterUsers() {
         var list = [];
@@ -522,6 +538,7 @@ class smashmap extends Component {
 
         const centerPosition = this.state.defaultCenter;
         const showFilter = this.state.showFilter;
+        const isLoading = this.state.isLoading;
         return (
             <div className="content-smashmap">
                 <BrowserView>
@@ -606,6 +623,18 @@ class smashmap extends Component {
                     </div>
                 </BrowserView>
                 <MobileView>
+                <div>
+                <ReactPullToRefresh
+  onRefresh={this.refreshUsers}
+  className=""
+>           <div className="pull-to-refresh">
+                              <i className="fa fa-arrow-down"></i><p>Pull to Refresh Map Data</p><i className="fa fa-arrow-down"></i>
+                              </div>
+                                     </ReactPullToRefresh>
+                                     </div>
+
+
+
                     <CSSTransition
                         in={showFilter}
                         timeout={300}
@@ -677,24 +706,42 @@ class smashmap extends Component {
                             </div>
                         )}
                     </CSSTransition>
-                    <div className="googlemap">
-                        <div className="mobile-map-filter">
-                            <a className="btn btn-filter" href="#" onClick={this.toggleFilterModal}><i className="fa fa-filter"></i>FILTER</a>
+                    <CSSTransition
+                        in={isLoading}
+                        classNames="loading-user-spinner"
+                        timeout={500}
+                        unmountOnExit
+                    >
+                        <div className="spinner-container">
+                            <i className="fa fa-gamepad fa-spin fa-3x loading-spinner"></i>
+                            <h4>Initializing Smash Map...</h4>
+                        </div>
+                    </CSSTransition>
+                    <CSSTransition
+                        in={!isLoading}
+                        classNames="loading-user-spinner"
+                        unmountOnExit
+                        timeout={500}
+                    >
+                        <div className="googlemap">
+                          
+                            <div className="mobile-map-filter">
+                                <a className="btn btn-filter" onClick={this.toggleFilterModal}><i className="fa fa-filter"></i> Filter Players</a>
+                            </div>
+
+                            <GAMap
+                                mapUsers={mapUsersResults}
+                                defaultCenter={centerPosition}
+                                radius={selectedRadius}
+                                filterOptions={filterOptions}
+                            >
+
+
+                            </GAMap>
+
 
                         </div>
-
-                        <GAMap
-                            mapUsers={mapUsersResults}
-                            defaultCenter={centerPosition}
-                            radius={selectedRadius}
-                            filterOptions={filterOptions}
-                        >
-
-
-                        </GAMap>
-
-
-                    </div>
+                    </CSSTransition>
 
                 </MobileView>
 

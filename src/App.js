@@ -30,6 +30,8 @@ import {
   isBrowser,
   isMobile
 } from "react-device-detect";
+import ReactGA from 'react-ga';
+
 const cookies = new Cookies();
 var homeIco = require('./Media/home.png');
 var userIco = require('./Media/user.svg');
@@ -61,6 +63,7 @@ class App extends Component {
     this.clearUser = this.clearUser.bind(this)
   }
   setUserDetails = userDetails => {
+    ReactGA.set({ userId: userDetails.appuserid });
     this.setState({ userDetails: userDetails })
     cookies.set('userDetails', userDetails, { path: '/' });
 
@@ -75,6 +78,14 @@ class App extends Component {
     this.setState({ userDetails: {} });
   }
   render() {
+    ReactGA.initialize('UA-129735914-1', {
+      titleCase: false,
+      gaOptions: {
+        userId: this.state.userDetails.appuserid,
+        name: this.state.userDetails.tag
+      }
+    });
+
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
       userHasAuthenticated: this.userHasAuthenticated,
@@ -220,14 +231,14 @@ class App extends Component {
                         <Switch location={location}>
 
                           <AppliedRoute path="/" exact component={home} props={childProps} />
-                          <AppliedRoute exact path="/events" component={events} props={childProps} />
-                          <AppliedRoute exact path="/smashmap" component={smashmap} props={childProps} />
-                          <AppliedRoute exact path="/faq" component={faq} props={childProps} />
+                          <AppliedRoute  path="/events" component={events} props={childProps} />
+                          <AppliedRoute  path="/smashmap" component={smashmap} props={childProps} />
+                          <AppliedRoute  path="/faq" component={faq} props={childProps} />
                           <AppliedRoute exact path="/account" component={account} props={childProps} />
                           <AppliedRoute exact path="/account/accountdetails" component={accountdetails} props={childProps} />
                           <AppliedRoute exact path="/account/accountdetails/accountsettings" component={AccountSettings} props={childProps} />
 
-                          <Route render={() => <div>Not Found</div>} />
+                          <AppliedRoute render={() => <div>Not Found</div>} />
 
                         </Switch>
                       </CSSTransition>

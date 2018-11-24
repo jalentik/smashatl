@@ -15,6 +15,8 @@ import {
 import fbicon from '../../../Media/fb.png';
 import twiticon from '../../../Media/twit.png';
 import twtchicon from '../../../Media/twitch.png';
+import ReactGA from 'react-ga';
+
 var check = require('../../../Media/check-symbol.png')
 var network = require('../../../Media/network.svg')
 var emptyCheck = require('../../../Media/check-box-empty.png')
@@ -114,6 +116,7 @@ class AccountSettings extends Component {
         this.playstyleChange = this.playstyleChange.bind(this);
     }
     componentDidMount() {
+        ReactGA.pageview('/accountdetails/accountsettings');
         if (this.props.location.state) {
             this.setState({
                 selectedMain: this.props.location.state.main || -1, selectedSecondary: this.props.location.state.secondary || -1,
@@ -146,13 +149,10 @@ class AccountSettings extends Component {
         this.setState({ selectedSecondary: val.charId })
     }
     saveChanges() {
-        var twtch = !(this.state.twtch.indexOf("www.") > 0) && !(this.state.twtch.indexOf("http://") > 0) && this.state.twtch ? "http://www." + this.state.twtch : this.state.twtch;
-        var fb = !(this.state.fb.indexOf("www.") > 0) && !(this.state.fb.indexOf("http://") > 0) && this.state.fb ? "http://www." + this.state.fb : this.state.fb;
-        var twit = !(this.state.twit.indexOf("www.") > 0) && !(this.state.twit.indexOf("http://" > 0) && this.state.twit > 0) ? "http://www." + this.state.twit : this.state.twit;
-        if(!twtch.indexOf('twitch.tv') > 0 && twtch.length > 0){alert('Please use a valid twitch address.');return;}
-        if(!twit.indexOf('twitter.com') > 0 && twit.length > 0){alert('Please use a valid twitter address.');return;}
-        if(!twtch.indexOf('facebook.com') > 0 && twtch.length > 0){alert('Please use a valid facebook address.');return;}
-
+        var twtch = this.state.twtch;
+        var fb = this.state.fb;
+        var twit = this.state.twit;
+        
         if (!this.state.selectedMain || !this.state.tag || !this.state.selectedPlaystyle) { alert('A main, tag, and playstyle are required.'); return; }
         fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appuserdetails/savechanges", {
             method: 'POST',
@@ -335,15 +335,15 @@ class AccountSettings extends Component {
                         />
 
                         <h3>Social Networks</h3>
+                        <p style={{color:"#ddd", fontSize:"15px"}}>Your social network names can be located at the end of your URL. i.e. "www.facebook.com/<strong>myuser</strong>".</p>
                         <div className='social-network-title'><img src={fbicon} style={{ cursor: "pointer" }} className='social-image small' /><span id="title"> Facebook</span></div>
-                        <input onChange={this.fbChange} value={fb} type="text" placeholder="www.facebook.com/myfbname" />
-
+                        <input onChange={this.fbChange} value={fb} type="text" placeholder="myfbname" />
 
                          <div className='social-network-title'><img src={twiticon} style={{ cursor: "pointer" }} className='social-image small' /><span id="title"> Twitter</span></div>
-                        <input onChange={this.twitChange} value={twit} type="text" placeholder="www.twitter.com/mytwittername" />
+                        <input onChange={this.twitChange} value={twit} type="text" placeholder="mytwittername" />
 
                          <div className='social-network-title'><img src={twtchicon} style={{ cursor: "pointer" }} className='social-image small' /><span id="title">Twitch</span></div>
-                        <input onChange={this.twtchChange} value={twtch} type="text" placeholder="www.twitch.tv/mytwitchname" style={{marginBottom: "30px"}} />
+                        <input onChange={this.twtchChange} value={twtch} type="text" placeholder="mytwitchname" style={{marginBottom: "30px"}} />
                  
                         <a onClick={this.saveChanges} className="save-changes" style={{ cursor: "pointer" }}>Save Changes</a>
 
@@ -354,6 +354,10 @@ class AccountSettings extends Component {
     }
 }
 class accounthome extends Component {
+    componentDidMount(){
+        ReactGA.pageview('/accountdetails/accounthome');
+
+    }
     render() {
         if(isMobile){
             return (
@@ -383,6 +387,9 @@ class accountdetails extends Component {
         this.tabChange = this.tabChange.bind(this);
         this.setViewing = this.setViewing.bind(this);
         this.LogOutUser = this.LogOutUser.bind(this);
+    }
+    componentDidMount(){
+        ReactGA.pageview('/accountdetails');
     }
     tabChange(tab) {
         this.setState({ tab })
