@@ -27,7 +27,27 @@ class home extends Component {
                             Miles Ifie or Jalen Underwood on the Georgia Smash Facebook page.
                             Thank you for reading and we look forward to the release of Ultimate.
                         </li>
+                        <li>
+                            <h4>Alpha Patch 1.01 - 11.24.18</h4>
+                            <ul style={{ listStyle: "none", padding: "10px", margin: 0, fontFamily: 'Quicksand, sans-serif' }}>
+                                <li>
+                                    <strong>General</strong>
+                                    <ul style={{ listStyle: "circle", padding: "10px", margin: 0, fontFamily: 'Quicksand, sans-serif' }}>
+                                    <li>
+                                      Added new characters that were missing from the character select.
+                                        </li>
+                                    </ul>
+                                </li>
 
+                                <li><strong>Account</strong>
+                                    <ul style={{ listStyle: "circle", padding: "10px", margin: 0, fontFamily: 'Quicksand, sans-serif' }}>
+                                        <li>Changed social network link fields to social network name only. Originally intended for people to provide their own links, however I do see major flaws in this design and do not feel like accomodating all of them.</li>
+                                        <li>With the change to the social network fields, I've emptied them all for you in advance. Thank you for your understanding.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                        </li>
                         <li>
                             <h4>Alpha Patch 1 - 11.24.18</h4>
                             <ul style={{ listStyle: "none", padding: "10px", margin: 0, fontFamily: 'Quicksand, sans-serif' }}>
