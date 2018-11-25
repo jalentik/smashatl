@@ -1,4 +1,80 @@
 .announcements-container{
-    max-height: 40vh;
+    max-height: 100vh;
+    background: #fff;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.announcements-list{
+    max-height: 60vh;
     overflow-y: auto;
 }
+
+.join-now-link{
+    text-decoration: none;
+    color: #000;
+    width: 90%;
+    margin: 0 auto;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 10px 0px;
+    text-align:center;
+    transition: 500ms all ease-in-out;
+    -o-transition: 500ms all ease-in-out;
+    -webkit-transition: 500ms all ease-in-out;
+    -moz-transition: 500ms all ease-in-out;
+}
+
+.join-now-link:active{
+    background: #000;
+
+}
+
+.announcements-modal-enter {
+    opacity: 0;
+    z-index: 1;
+  }
+  
+  .announcements-modal-enter-active {
+    opacity: 1;
+    transition: opacity 250ms ease-in-out;
+  }
+  
+  
+  .announcements-modal-exit {
+    opacity: 1;
+    z-index: 0;
+  }
+  
+  .announcements-modal-exit-active {
+    opacity: 0;
+    transition: opacity 130 ease-in-out;
+  }
+
+
+  
+  .view-announcements-link{
+      text-decoration: underline;
+      text-align: center;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      
+  }
+
+  .hide-announcements-link{
+    text-decoration: underline;
+    text-align: center;
+    width: 100vw;
+    color: #ddd;
+    text-decoration: none;
+  }
+
+  .hide-announcements-link h3{
+      color: #ddd;
+
+  }
+

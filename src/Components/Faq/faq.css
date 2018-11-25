@@ -81,7 +81,6 @@ div.top-bar ul.ul-directory li{
     list-style-type: none;
     cursor:pointer;
     flex: 1;
-    padding-top: 25px;
 }
 .faq-content{
     flex:1;
