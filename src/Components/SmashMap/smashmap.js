@@ -59,7 +59,6 @@ const GAMap = compose(
                     refs.map = ref;
                 },
                 onIdle: () => {
-                    console.log(this.props)
                     this.setState({
                         bounds: refs.map.getBounds(),
                         center: refs.map.getCenter(),
@@ -434,7 +433,7 @@ class smashmap extends Component {
         } else {
             this.toggleLoading();
             var list = [];
-            fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appusers/getappusers")
+            fetch("http://smashatlapi-prod.us-east-2.elasticbeanstalk.com/api/appusers/getappusers")
                 .then(results => {
                     if (!results.ok) {
                         throw new Error("Something went wrong.")
@@ -697,8 +696,8 @@ class smashmap extends Component {
                                             </div>
                                         </div>
                                         <div className="filter-actions">
-                                            <a href="#" className="btn btn-success btn-lg filter-go" onClick={this.filterUsers}><i className="fa fa-filter"></i><p> Filter</p></a>
-                                            <a href="#" className="btn btn-primary btn-lg" onClick={this.clearFilters}><i className="fa fa-times"></i> <p>Clear</p></a>
+                                            <a className="btn btn-success btn-lg filter-go" onClick={this.filterUsers}><i className="fa fa-filter"></i><p> Filter</p></a>
+                                            <a className="btn btn-primary btn-lg" onClick={this.clearFilters}><i className="fa fa-times"></i> <p>Clear</p></a>
 
                                         </div>
                                     </div>

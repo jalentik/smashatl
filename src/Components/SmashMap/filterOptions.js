@@ -75,6 +75,14 @@ export default {
         {charId:67, charName: "Young Link", thumbnail:"young_link.png"},
         {charId:68, charName: "Zelda", thumbnail:"zelda.png"},
         {charId:69, charName: "Zero Suit Samus", thumbnail:"zero_suit_samus.png"},
+        {charId:70, charName: "Ken", thumbnail:"ken.png"},
+        {charId:71, charName: "Simon", thumbnail:"simon.png"},
+        {charId:72, charName: "Richter", thumbnail:"richter.png"},
+        {charId:73, charName: "King K. Rool", thumbnail:"king_k_rool.png"},
+        {charId:74, charName: "Isabelle", thumbnail:"shizue.png"},
+        {charId:75, charName: "Incineroar", thumbnail:"zero_suit_samus.png"},
+        {charId:76, charName: "Pirahna Plant", thumbnail:"packun_flower.png"},
+
         
     ],
 

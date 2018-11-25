@@ -31,13 +31,15 @@ import {
   isMobile
 } from "react-device-detect";
 import ReactGA from 'react-ga';
-
+import createHistory from 'history/createBrowserHistory'
 const cookies = new Cookies();
 var homeIco = require('./Media/home.png');
 var userIco = require('./Media/user.svg');
 var questionIco = require('./Media/question-mark.svg');
 var mapIco = require('./Media/map.svg');
 var calendarIco = require('./Media/calendar.svg');
+
+
 class App extends Component {
 
   constructor(props) {
@@ -62,6 +64,21 @@ class App extends Component {
     }
     this.clearUser = this.clearUser.bind(this)
   }
+  componentWillMount(){
+    ReactGA.initialize('UA-129735914-1', {
+      titleCase: false,
+      gaOptions: {
+        userId: this.state.userDetails.appuserid,
+      }
+    });
+
+    const history = createHistory()
+history.listen((location, action) => {
+  ReactGA.set({ page: window.location.pathname });
+  ReactGA.pageview(window.location.pathname);
+});
+
+  }
   setUserDetails = userDetails => {
     ReactGA.set({ userId: userDetails.appuserid });
     this.setState({ userDetails: userDetails })
@@ -78,13 +95,7 @@ class App extends Component {
     this.setState({ userDetails: {} });
   }
   render() {
-    ReactGA.initialize('UA-129735914-1', {
-      titleCase: false,
-      gaOptions: {
-        userId: this.state.userDetails.appuserid,
-        name: this.state.userDetails.tag
-      }
-    });
+    
 
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
@@ -95,7 +106,7 @@ class App extends Component {
     };
     return (
       <BrowserRouter>
-        <Route
+        <Route 
           render={({ location }) => (
             <div id="app" className="app" >
               <BrowserView>
@@ -224,7 +235,6 @@ class App extends Component {
                 </div>
 
                 <div className="content">
-
                   <div className="content-main" >
                     <TransitionGroup>
                       <CSSTransition in key={location.key} classNames="page-transition" timeout={500}>

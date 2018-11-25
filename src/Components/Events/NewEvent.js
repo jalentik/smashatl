@@ -180,7 +180,7 @@ class NewEvent extends Component {
 
     submitForm(e) {
         e.preventDefault();
-        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/events/postevent", {
+        fetch("http://smashatlapi-prod.us-east-2.elasticbeanstalk.com/api/events/postevent", {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

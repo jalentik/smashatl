@@ -67,7 +67,7 @@ class LoginForm extends Component {
 
         if (u && p) {
             this.toggleFormSubmitting();
-            fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appuserdetails/authorizeuser", { //http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appuserdetails/auth
+            fetch("http://smashatlapi-prod.us-east-2.elasticbeanstalk.com/api/appuserdetails/authorizeuser", { //http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appuserdetails/auth
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -199,11 +199,11 @@ class SignupForm extends Component {
         if (this.state.user && this.state.pass && this.state.confirm && this.state.email && this.state.zipcode && this.state.pass === this.state.confirm && this.state.tag) {
             this.toggleFormSubmitting();
             var zipObj = {};
-            fetch('http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/applocations/getapplocation/' + this.state.zipcode, {
+            fetch('http://smashatlapi-prod.us-east-2.elasticbeanstalk.com/api/applocations/getapplocation/' + this.state.zipcode, {
                 method: 'GET',
             }).then(response => { if (response.ok) { return response.json() } else {  alert('Please enter a valid zipcode.'); throw new Error("Zip code is incorrect.") } }).then(zip => {
                 zipObj = zip;
-                fetch('http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appuserdetails/postappuserdetail', {
+                fetch('http://smashatlapi-prod.us-east-2.elasticbeanstalk.com/api/appuserdetails/postappuserdetail', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -220,7 +220,7 @@ class SignupForm extends Component {
 
                 }).then(results => { if (results.ok) { return results.json() } else { alert('Please check your account information is valid.'); throw new Error("user") } })
                     .then(response => {
-                        fetch('http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appusers/postappuser', {
+                        fetch('http://smashatlapi-prod.us-east-2.elasticbeanstalk.com/api/appusers/postappuser', {
                             method: 'POST',
                             headers: {
                                 Accept: 'application/json',

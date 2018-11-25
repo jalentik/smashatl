@@ -36,7 +36,7 @@ class event extends Component {
         this.refreshEvents();
     }
     refreshEvents() {
-        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/events/getevents", {
+        fetch("http://smashatlapi-prod.us-east-2.elasticbeanstalk.com/api/events/getevents", {
             method: 'GET',
             headers: {
                 Accept: 'application/json',

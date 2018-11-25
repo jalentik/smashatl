@@ -154,7 +154,7 @@ class AccountSettings extends Component {
         var twit = this.state.twit;
         
         if (!this.state.selectedMain || !this.state.tag || !this.state.selectedPlaystyle) { alert('A main, tag, and playstyle are required.'); return; }
-        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/appuserdetails/savechanges", {
+        fetch("http://smashatlapi-prod.us-east-2.elasticbeanstalk.com/api/appuserdetails/savechanges", {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

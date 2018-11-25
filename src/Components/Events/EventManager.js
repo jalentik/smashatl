@@ -20,7 +20,7 @@ class event extends Component {
         ReactGA.pageview('/events/eventmanager');
     }
     getEvents(){
-        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/events/getevents/" + this.props.appuserid, {
+        fetch("http://smashatlapi-prod.us-east-2.elasticbeanstalk.com/api/events/getevents/" + this.props.appuserid, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -38,7 +38,7 @@ class event extends Component {
             })
     }
     postEvent(){
-        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/events/postevent/", {
+        fetch("http://smashatlapi-prod.us-east-2.elasticbeanstalk.com/api/events/postevent/", {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -56,7 +56,7 @@ class event extends Component {
             })
     }
     putEvent(){
-        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/events/getevents/", {
+        fetch("http://smashatlapi-prod.us-east-2.elasticbeanstalk.com/api/events/getevents/", {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -74,7 +74,7 @@ class event extends Component {
             })
     }
     deleteEvent(){
-        fetch("http://smashatlapi-dev.us-east-2.elasticbeanstalk.com/api/events/getevents/", {
+        fetch("http://smashatlapi-prod.us-east-2.elasticbeanstalk.com/api/events/getevents/", {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
