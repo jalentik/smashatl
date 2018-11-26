@@ -80,7 +80,7 @@ export default {
         {charId:72, charName: "Richter", thumbnail:"richter.png"},
         {charId:73, charName: "King K. Rool", thumbnail:"king_k_rool.png"},
         {charId:74, charName: "Isabelle", thumbnail:"shizue.png"},
-        {charId:75, charName: "Incineroar", thumbnail:"zero_suit_samus.png"},
+        {charId:75, charName: "Incineroar", thumbnail:"gaogaen.png"},
         {charId:76, charName: "Pirahna Plant", thumbnail:"packun_flower.png"},
 
         

@@ -35,11 +35,45 @@ class home extends Component {
                     <h3 style={{ textAlign: "center" }}>Announcements</h3>
                     <ul className="announcements-list" style={{ listStyle: "none", padding: "10px", margin: 0, fontFamily: 'Quicksand, sans-serif', fontSize: '15px' }}>
                         <li>
-                            We welcome everyone to our smash atl open beta.
+                            We welcome everyone to our Smash ATL open alpha.
                             Right now there is limited functionality as we prepare awesome new features to
                             provide our players and TO's with. For any feedback or concerns, feel free to contact
                             Miles Ifie or Jalen Underwood on the Georgia Smash Facebook page.
                             Thank you for reading and we look forward to the release of Ultimate.
+                        </li>
+                        <li>
+                            <h4>Alpha Patch 1.02 - 11.26.18</h4>
+                            <ul style={{ listStyle: "none", padding: "10px", margin: 0, fontFamily: 'Quicksand, sans-serif' }}>
+                                <li>
+                                    <strong>Events</strong>
+                                    <ul style={{ listStyle: "circle", padding: "10px", margin: 0, fontFamily: 'Quicksand, sans-serif' }}>
+                                    <li>
+                                      Events slider working, awaiting content from Miles.
+                                        </li>
+                                        <li>
+                                            <strong>Event Manager in testing</strong>. This goal of this feature is to streamline the event planning and creating process by utilizing
+                                            reusable venue and event templates. After creation, the text can be converted to raw text for use in displaying on other websites (or here, once
+                                            available). While you
+                                            may only see the events slide images for now, there is a lot of data behind the scenes that will be revealed as more progress is made.
+                                            </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>General</strong>
+                                    <ul style={{ listStyle: "circle", padding: "10px", margin: 0, fontFamily: 'Quicksand, sans-serif' }}>
+                                        <li>
+                                            Fixed 404 route issue
+                                        </li>
+                                        <li>
+                                            Many other small technical issues that would take longer to document than the time it took to resolve them.
+                                        </li>
+                                        <li>
+                                            Fixed Incineroar pretending to be ZSS on dropdown/select boxes.
+                                            </li>
+                                    </ul>
+                                </li>
+                            </ul>
+
                         </li>
                         <li>
                             <h4>Alpha Patch 1.01 - 11.24.18</h4>
