@@ -62,7 +62,7 @@ class NewEvent extends Component {
         this.postalCodeChange = this.postalCodeChange.bind(this);
         this.hasSinglesChange = this.hasSinglesChange.bind(this);
         this.singlesFeeChange = this.singlesFeeChange.bind(this);
-        this.singlesStartTimeChange= this.singlesStartTimeChange.bind(this);
+        this.singlesStartTimeChange = this.singlesStartTimeChange.bind(this);
         this.singlesMaxCountChange = this.singlesMaxCountChange.bind(this);
         this.hasDoublesChange = this.hasDoublesChange.bind(this);
         this.doublesFeeChange = this.doublesFeeChange.bind(this);
@@ -74,7 +74,7 @@ class NewEvent extends Component {
         this.submitForm = this.submitForm.bind(this);
         this.postSubmitHandler = this.props.postSubmitHandler.bind(this);
     }
-    componentDidMount(){
+    componentDidMount() {
         ReactGA.pageview('/events/newevent');
     }
     nameChange(e) {
@@ -236,32 +236,32 @@ class NewEvent extends Component {
         return (
             <div key="new-event" className="new-event-window">
                 <MobileView viewClassName="new-event-modal-container">
-                    <div onClick={this.toggleShow}  className="modal-background">
+                    <div onClick={this.toggleShow} className="modal-background">
                         <div className="modal new-event-modal">
-                        <h1>New Event</h1>
-                    <div style={{display: 'inline-block'}}><span style={{color:'red'}}>*</span>= required.</div>
+                            <h1>New Event</h1>
+                            <div style={{ display: 'inline-block' }}><span style={{ color: 'red' }}>*</span>= required.</div>
                             <form onSubmit={this.submitForm}>
                                 <h2>
                                     Details
                              </h2>
                                 <div className="form-items-container">
-                                    <p>Event URL<span style={{color:'red'}}>*</span></p>
+                                    <p>Event URL<span style={{ color: 'red' }}>*</span></p>
                                     <input onChange={this.urlChange} value={url} type="text" placeholder="http://facebook.com/events/..." />
 
-                                    <p>Event Name<span style={{color:'red'}}>*</span></p>
+                                    <p>Event Name<span style={{ color: 'red' }}>*</span></p>
                                     <input onChange={this.nameChange} value={name} type="text" placeholder="My Event Name" />
 
                                     <p>Description</p>
                                     <input onChange={this.descriptionChange} value={description} type="text" placeholder="Some details about my tournament" />
                                     <div className="item-row-container">
 
-                                        <p>Event Start Date<span style={{color:'red'}}>*</span></p>
+                                        <p>Event Start Date<span style={{ color: 'red' }}>*</span></p>
                                         <input onChange={this.dateChange} value={date} type="date" />
                                     </div>
                                     <p>Logo Url</p>
                                     <input onChange={this.logourlChange} value={logoUrl} type="text" placeholder="http://myimagehost.com/myimage.png" />
 
-                                    <p>Venue Name<span style={{color:'red'}}>*</span></p>
+                                    <p>Venue Name<span style={{ color: 'red' }}>*</span></p>
                                     <input onChange={this.venueNameChange} value={venueName} type="text" placeholder="Hosting venue's name" />
 
 
@@ -371,7 +371,7 @@ class NewEvent extends Component {
                                                 <div className="item-row-container">
 
                                                     <p>Discount Amount</p>
-                                                    <input onChange={this.setupDiscountChange} value={setupDiscount} type="number" placeholder="" min="0.01" step="0.01" />
+                                                    <input onChange={this.setupDiscountChange} value={setupDiscount} type="number" placeholder="" step="0.01" />
                                                 </div>
                                                 <div className="item-row-container">
 
@@ -386,8 +386,8 @@ class NewEvent extends Component {
                                 </div>
 
                                 <h2>
-                                    Location<span style={{color:'red'}}>*</span>
-                                        </h2>
+                                    Location<span style={{ color: 'red' }}>*</span>
+                                </h2>
                                 <div className="form-items-container">
                                     <p>Street Address</p>
                                     <input onChange={this.street1Change} value={street1} type="text" placeholder="42 Wallaby Way" />
@@ -407,7 +407,7 @@ class NewEvent extends Component {
                                     <input onChange={this.postalCodeChange} value={postalCode} type="text" placeholder="12345" />
                                 </div>
 
-                                <input type="submit" value="Submit" style={{marginBottom: "30px"}} />
+                                <input type="submit" value="Submit" style={{ marginBottom: "30px" }} />
                             </form>
 
                         </div>

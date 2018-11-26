@@ -15,8 +15,6 @@ class home extends Component {
     }
     componentDidMount() {
         document.title = "SmashATL";
-        ReactGA.pageview('/home');
-
     }
     toggleAnnouncements(){
        this.setState({showAnnouncements: !this.state.showAnnouncements})
@@ -30,7 +28,7 @@ class home extends Component {
                     <h1>Welcome to Smash Atlanta.</h1>
                     <h2>Your premier source for finding players and tournaments near you.</h2>
                 </div>
-                <a className="join-now-link rainbow" href="/account">Join Now!</a>
+                <a className="join-now-link rainbow" onClick={() => this.props.history.push('/account')}>Join Now!</a>
                 <a className="view-announcements-link" style={{textDecoration: "underline"}} onClick={this.toggleAnnouncements}><h2>View Announcements</h2></a>
                 <CSSTransition in={showAnnouncements} classNames="announcements-modal" unmountOnExit timeout={500}>
                 <div className="announcements-container">

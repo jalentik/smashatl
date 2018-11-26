@@ -8,25 +8,29 @@ import {
     isBrowser,
     isMobile
 } from "react-device-detect";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from 'react-responsive-carousel';
 import ReactGA from 'react-ga';
-
+import EventManager from './EventManager';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
 var bnb = require('../../Media/bnb.jpg');
 
 
 class event extends Component {
     constructor(props) {
         super(props);
-        this.state = { events: [], showNewEvent: false, selectedEventIndex: 0 }
+        this.state = { events: [], showNewEvent: false, showEventManager: false, selectedEventIndex: 0 }
         this.refreshEvents = this.refreshEvents.bind(this);
         this.toggleShowNewEvent = this.toggleShowNewEvent.bind(this);
         this.newEventHandler = this.newEventHandler.bind(this);
+        this.toggleShowEventManager = this.toggleShowEventManager.bind(this);
     }
     componentDidMount() {
-        ReactGA.pageview('/events');
         document.title = "Events";
         this.refreshEvents();
+    }
+    toggleShowEventManager() {
+        this.setState({ showEventManager: !this.state.showEventManager })
     }
     toggleShowNewEvent() {
         this.setState({ showNewEvent: !this.state.showNewEvent })
@@ -55,34 +59,59 @@ class event extends Component {
     }
     onClickThumb(e) {
     }
-    onClickItem(e, f) {
-        window.open(f.key, '_blank');
+    onClickItem(e) {
+        console.log(e)
+
 
     }
     onCarouselChange(e) {
     }
     render() {
         const showNewEvent = this.state.showNewEvent;
+        const showEventManager = this.state.showEventManager;
         const events = this.state.events;
+        var settings = {
+            dots: true,
+            className: "events-slider"
+          };
         let newEventButton;
+        let eventManagerButton
         if (this.props.userDetails) {
             if (this.props.isAuthenticated) {
                 if (this.props.userDetails.roles) {
                     if (this.props.userDetails.roles.indexOf("App.Administrator") > 0 || this.props.userDetails.roles.indexOf("App.Owner") > 0) {
-                        newEventButton = <a className="new-event-btn" onClick={this.toggleShowNewEvent}><i className="fa fa-plus"></i>New Event</a>
+                        newEventButton = <a className="new-event-btn" onClick={this.toggleShowNewEvent}><i className="fa fa-plus"></i>  New Event</a>
+                        eventManagerButton = <a className="event-man-btn" onClick={this.toggleShowEventManager}><i className="fa fa-tasks"></i>  Manage</a> 
                     }
                 }
             }
         }
         const selectedEventIndex = this.state.selectedEventIndex;
-        const listItems = this.state.events.map((item, i) =>
-            <div key={item.Url}>
+        const listItems = events.map((item, i) =>
+            <div className="image-item" key={item.Url}>
+             <a href={item.Url}>
                 <img src={item.LogoUrl} />
+                <p></p>
+                </a>
             </div>
         );
         return (
 
             <div className="events-content">
+            <CSSTransition
+                    in={showEventManager}
+                    timeout={300}
+                    classNames="new-event-window"
+                    unmountOnExit
+
+                    onExited={() => {
+                    }}
+                >
+                    {state => (
+                     <EventManager appuserid={this.props.userDetails.appuserid} toggleHandler={this.toggleShowEventManager}/>
+                    )
+                    }
+                </CSSTransition>
                 <CSSTransition
                     in={showNewEvent}
                     timeout={300}
@@ -98,13 +127,15 @@ class event extends Component {
                     }
                 </CSSTransition>
                 <h1>Upcoming Events</h1>
-                <h3>Double tap the event for more details.</h3>
-                <Carousel showArrows={true} onChange={this.onCarouselChange} selectedItem={selectedEventIndex} onClickItem={this.onClickItem} onClickThumb={this.onClickThumb}>
-                    {listItems}
-                </Carousel>
+                <h4>Swipe left and right to view events.</h4>
+                <h4>Tap the event for more details.</h4>
+                <Slider {...settings}> 
+                {listItems}
+                    
+                </Slider>
                 <MobileView>
                     {newEventButton}
-                    
+                    {eventManagerButton}
                 </MobileView>
             </div>
 
