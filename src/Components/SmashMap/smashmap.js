@@ -126,7 +126,7 @@ const GAMap = compose(
             })
         },
         componentWillReceiveProps(nextProps) {
-            this.forceUpdate();
+            
 
         }
     }),
@@ -429,11 +429,15 @@ class smashmap extends Component {
     fetchUsers(force) {
         var usersData = localStorage.getItem("userdata");
         if (usersData && !force) {
-            this.setState({ mapUsers: JSON.parse(usersData) }, this.filterUsers)      
+            this.setState({ mapUsers: JSON.parse(usersData) }, this.filterUsers)
         } else {
             this.toggleLoading();
             var list = [];
-            fetch("http://smashatlapi-prod.us-east-2.elasticbeanstalk.com/api/appusers/getappusers")
+            fetch("http://smashatlapi-prod.us-east-2.elasticbeanstalk.com/api/appusers/getappusers",  {headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': 0
+                          }})
                 .then(results => {
                     if (!results.ok) {
                         throw new Error("Something went wrong.")
@@ -456,7 +460,7 @@ class smashmap extends Component {
                     this.toggleLoading();
 
                 })
-                .catch(error =>{ console.log(error); this.toggleLoading(); alert('Map data could not be loaded. Please try again later.')})
+                .catch(error => { console.log(error); this.toggleLoading(); alert('Map data could not be loaded. Please try again later.') })
         }
     }
     refreshUsers() {
@@ -476,26 +480,28 @@ class smashmap extends Component {
     }
     filterUsers() {
         var list = [];
-        if (!this.state.selectedPlaystyle && !this.state.selectedChars) {
-            this.setState({ mapUsersResults: this.state.mapUsers })
-        } else {
-            this.state.mapUsers.forEach(c => {
-                var match = false;
-                if (this.state.selectedChars)
-                    this.state.selectedChars.forEach(f => {
-                        if (c.MainId === f.charId) match = true;
-                        if (c.SecondaryId === f.charId) match = true;
-                    })
+        this.setState({ mapUsersResults: []}, function () {
+            if (!this.state.selectedPlaystyle && !this.state.selectedChars) {
+                this.setState({ mapUsersResults: this.state.mapUsers })
+            } else {
+                this.state.mapUsers.forEach(c => {
+                    var match = false;
+                    if (this.state.selectedChars)
+                        this.state.selectedChars.forEach(f => {
+                            if (c.MainId === f.charId) match = true;
+                            if (c.SecondaryId === f.charId) match = true;
+                        })
 
-                if (this.state.selectedPlaystyle)
-                    this.state.selectedPlaystyle.forEach(f => {
-                        if (c.StyleId === f.playId) match = true;
-                    })
+                    if (this.state.selectedPlaystyle)
+                        this.state.selectedPlaystyle.forEach(f => {
+                            if (c.StyleId === f.playId) match = true;
+                        })
 
-                if (match) list.push(c);
-            })
-            this.setState({ mapUsersResults: list }, function () { this.forceUpdate() });
-        }
+                    if (match) list.push(c);
+                })
+                this.setState({ mapUsersResults: list });
+            }
+        })
 
 
     }
@@ -622,15 +628,15 @@ class smashmap extends Component {
                     </div>
                 </BrowserView>
                 <MobileView>
-                <div>
-                <ReactPullToRefresh
-  onRefresh={this.refreshUsers}
-  className=""
->           <div className="pull-to-refresh">
-                              <i className="fa fa-arrow-down"></i><p>Pull to Refresh Map Data</p><i className="fa fa-arrow-down"></i>
-                              </div>
-                                     </ReactPullToRefresh>
-                                     </div>
+                    <div>
+                        <ReactPullToRefresh
+                            onRefresh={this.refreshUsers}
+                            className=""
+                        >           <div className="pull-to-refresh">
+                                <i className="fa fa-arrow-down"></i><p>Pull to Refresh Map Data</p><i className="fa fa-arrow-down"></i>
+                            </div>
+                        </ReactPullToRefresh>
+                    </div>
 
 
 
@@ -691,7 +697,7 @@ class smashmap extends Component {
                                                     value={selectedRadius}
                                                     labelKey={"text"}
                                                     valueKey={"radiusVal"}
-
+                                                    
                                                 />
                                             </div>
                                         </div>
@@ -719,11 +725,10 @@ class smashmap extends Component {
                     <CSSTransition
                         in={!isLoading}
                         classNames="loading-user-spinner"
-                        unmountOnExit
                         timeout={500}
                     >
                         <div className="googlemap">
-                          
+
                             <div className="mobile-map-filter">
                                 <a className="btn btn-filter" onClick={this.toggleFilterModal}><i className="fa fa-filter"></i> Filter Players</a>
                             </div>

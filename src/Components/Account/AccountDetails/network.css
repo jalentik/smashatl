@@ -1,0 +1,168 @@
+
+.network-container h1{
+ width:70vw;
+ padding:0;
+ margin:0;
+ font-family: 'Quicksand', sans-serif;
+}
+
+.new-room-btn{
+    float:right;
+    color: #4BA4E8;
+    border: 3px solid #ddd;
+    border-radius: 25%;
+    padding: 5px;
+    margin-top:20px;
+}
+.online-presence{
+ 
+}
+.chat-window{
+    background: #fff;
+    -webkit-box-shadow: inset 0px 4px 70px -8px rgba(0,0,0,0.04);
+-moz-box-shadow: inset 0px 4px 70px -8px rgba(0,0,0,0.04);
+box-shadow: inset 0px 4px 70px -8px rgba(0,0,0,0.04);
+    width: 100vw;
+    height: 50vh;
+    overflow-y: scroll;
+    border-top: 2px solid rgb(187, 187, 187);
+    border-bottom: 2px solid rgb(187, 187, 187);
+    margin-left: -5vw;
+    display:block;
+    position: relative;
+}
+
+.network-container{
+ width: 90vw;
+ margin: 0 auto;
+}
+.network-container h1{
+    font-weight: 700;
+}
+.network-container h2{
+    font-weight: 300;
+    border-bottom: 1px solid #ddd;
+    font-size: 20px;
+}
+.chat-message-container{
+
+}
+
+.chat-message-user-tag{
+    font-weight:500;
+}
+
+.chat-message-body{
+    font-weight:300;
+}
+
+.chat-message-input{
+    width: 90vw;
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    outline: none;
+    padding: 3px 0px 3px 3px;
+    margin: 5px 1px 3px 0px;
+    border-top:0px;
+    border-left: 0px;
+    border-right:0px;
+    border-bottom: 1px solid rgb(207, 207, 207);
+}
+
+.chat-message-item{
+    display:block;
+    width:100%;
+    padding: 5px 0px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight:300;
+}
+.text-buff-admin img{
+    max-height:15px;
+    max-width:15px;
+}
+
+.icon-buff-admin{
+    font-family: 'Font Awesome 5 Free' !important;
+    font-size:20px;
+    height: 15px;
+    width: 15px;
+    background-size: 800% 800%;
+}
+
+.icon-container{
+    margin-top:auto;
+    margin-bottom:auto;
+    border-radius:25%;
+    padding: 2px;
+
+}
+
+.chat-message-item .wrapper{
+    font-size: inherit;
+    color: #fff;
+    font-weight:700 !important;
+    display:inline-block;
+    border-radius: 25% 25% 25% 25%;
+    width:auto;
+    animation: rainbow 10s ease-in-out infinite;
+    margin: auto 0px;
+    padding:5px;
+
+}
+
+.go-back-arrow{
+    color:rgb(197, 38, 38)
+}
+
+.back-container{
+    margin-top: 10px
+}
+
+.rooms-container{
+    padding:0;
+    margin:0;
+    list-style:none;
+    width:100vw;
+    max-height: 50vh;
+    overflow-y:scroll;
+}
+
+.rooms-container li{
+    font-family: "Quicksand", sans-serif;
+    border-top: 1px solid #c4c4c4;
+    border-bottom: 1px solid #c4c4c4;
+}
+
+.loading-spinner{
+    margin: 0 auto;
+}
+
+.room-info-footer{
+    width:100%;
+    display: flex;
+    height: 15%;
+    justify-content: space-evenly;
+}
+
+.channel-create-container{
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    flex-direction: column;
+    font-family: 'Quicksand', sans-serif;
+    height: 100vh;
+    background: #fff;
+    text-align:center;
+}
+
+.error-container{
+    display:block;
+    text-align: center;
+}
+
+.error-text{
+    color: #be1313;
+    font-size:12px;
+}

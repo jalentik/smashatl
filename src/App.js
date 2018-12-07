@@ -32,6 +32,10 @@ import {
 } from "react-device-detect";
 import ReactGA from 'react-ga';
 import createHistory from 'history/createBrowserHistory'
+
+import Pusher from 'pusher-js';
+import Network from './Components/Account/AccountDetails/network';
+import Channel from './Components/Account/AccountDetails/network';
 const cookies = new Cookies();
 var homeIco = require('./Media/home.png');
 var userIco = require('./Media/user.svg');
@@ -59,12 +63,16 @@ class App extends Component {
         facebookurl: "",
         playstyle: -1,
         roles: ""
-      }
+      },
+      pusher: null,
+      channels: []
+
 
     }
     this.clearUser = this.clearUser.bind(this)
+    this.addChannel = this.addChannel.bind(this);
   }
-  componentWillMount(){
+  componentWillMount() {
     ReactGA.initialize('UA-129735914-1', {
       titleCase: false,
       gaOptions: {
@@ -73,21 +81,51 @@ class App extends Component {
     });
 
     const history = createHistory()
-history.listen((location, action) => {
-  ReactGA.set({ page: window.location.pathname });
-  ReactGA.pageview(window.location.pathname);
-});
+    history.listen((location, action) => {
+      ReactGA.set({ page: window.location.pathname });
+      ReactGA.pageview(window.location.pathname);
+    });
 
+    
+
+  }
+  componentDidMount(){
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('65b9bfbe024ea95f0051',{
+      cluster: 'us2', // if `host` is present, it will override the `cluster` option.
+      authEndpoint: 'http://localhost:58418/api/pusher/auth',
+      auth:{
+       params:{
+         'appUserId':this.state.userDetails.appuserid
+       }
+      }
+    });
+
+    var channel = pusher.subscribe('network-channel');
+    channel.bind('global-message', function (data) {
+      alert(JSON.stringify(data));
+    });
+    
+    this.setState({pusher: pusher}, ()=> this.addChannel(channel))
+  }
+  addChannel = channelName =>{
+    var channels = this.state.channels;
+    channels.push(channelName);
+    this.setState({channels: channels})
   }
   setUserDetails = userDetails => {
     ReactGA.set({ userId: userDetails.appuserid });
     this.setState({ userDetails: userDetails })
     cookies.set('userDetails', userDetails, { path: '/' });
-
+    
   }
   userHasAuthenticated = authenticated => {
     this.setState({ isAuthenticated: authenticated });
     cookies.set('isAuthenticated', authenticated, { path: '/' })
+
+    var globalPresence = this.state.pusher.subscribe('presence-global');
+    this.addChannel(globalPresence);
   }
   clearUser() {
     cookies.remove('isAuthenticated');
@@ -95,25 +133,26 @@ history.listen((location, action) => {
     this.setState({ userDetails: {} });
   }
   render() {
-    
+
 
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
       userHasAuthenticated: this.userHasAuthenticated,
       userDetails: this.state.userDetails,
       setUserDetails: this.setUserDetails,
-      clearUser: this.clearUser
+      clearUser: this.clearUser,
+      Pusher: this.state.pusher
     };
     return (
       <BrowserRouter>
-        <Route 
+        <Route
           render={({ location }) => (
             <div id="app" className="app" >
               <BrowserView>
-               <div>
-                 SmashATL Desktop Coming Soon.
+                <div>
+                  SmashATL Desktop Coming Soon.
                  </div>
-               {/*
+                {/*
                 <div className="header" ref='header'>
                   <div className="header-left">
                     <div className="nav-container">
@@ -186,7 +225,7 @@ history.listen((location, action) => {
               <MobileView>
                 <div className="header" ref='header'>
                   <div className="header-left">
-                  <div className="nav-container">
+                    <div className="nav-container">
                       <img src={logo3} className="logo" />
 
                       <div className="nav-item">
@@ -216,7 +255,7 @@ history.listen((location, action) => {
                       </div>
                       <div className="nav-item">
                         <NavLink to="/account">
-                          <img src={userIco} />
+                          <img className={childProps.isAuthenticated ? "wrapper" : ""} src={userIco} />
 
                         </NavLink>
                       </div>
@@ -240,20 +279,33 @@ history.listen((location, action) => {
                       <CSSTransition in key={location.key} classNames="page-transition" timeout={500}>
                         <Switch location={location}>
 
-                          <AppliedRoute path="/" exact component={home} props={childProps} />
-                          <AppliedRoute  path="/events" component={events} props={childProps} />
-                          <AppliedRoute  path="/smashmap" component={smashmap} props={childProps} />
-                          <AppliedRoute  path="/faq" component={faq} props={childProps} />
+                          <AppliedRoute exact path="/" exact component={home} props={childProps} />
+                          <AppliedRoute exact path="/events" component={events} props={childProps} />
+                          <AppliedRoute exact path="/smashmap" component={smashmap} props={childProps} />
+                          <AppliedRoute exact path="/faq" component={faq} props={childProps} />
                           <AppliedRoute exact path="/account" component={account} props={childProps} />
                           <AppliedRoute exact path="/account/accountdetails" component={accountdetails} props={childProps} />
                           <AppliedRoute exact path="/account/accountdetails/accountsettings" component={AccountSettings} props={childProps} />
+                          <AppliedRoute path="/account/accountdetails/network" component={Network} props={childProps}/>
 
-                          <AppliedRoute render={() => <div>Not Found</div>} />
+                         
+                          <Route render={() => <div>Not Found</div>} />
 
                         </Switch>
                       </CSSTransition>
                     </TransitionGroup>
                   </div>
+                  <CSSTransition>
+                    <div className="content-sidebar">
+                      <TransitionGroup>
+                        <CSSTransition key={location.key} classNames="sidebar-content-transition" timeout={500}>
+                          <Switch location={location}>
+
+                          </Switch>
+                        </CSSTransition>
+                      </TransitionGroup>
+                    </div>
+                  </CSSTransition>
 
                 </div>
               </MobileView>

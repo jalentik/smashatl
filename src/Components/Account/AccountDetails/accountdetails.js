@@ -16,6 +16,8 @@ import fbicon from '../../../Media/fb.png';
 import twiticon from '../../../Media/twit.png';
 import twtchicon from '../../../Media/twitch.png';
 import ReactGA from 'react-ga';
+import Network from './network';
+import AppliedRoute from '../../../Components/AppliedRoute.js'
 
 var check = require('../../../Media/check-symbol.png')
 var network = require('../../../Media/network.svg')
@@ -354,11 +356,15 @@ class AccountSettings extends Component {
     }
 }
 class accounthome extends Component {
+    constructor(props){
+        super(props);
+    }
     componentDidMount(){
         ReactGA.pageview('/accountdetails/accounthome');
 
     }
     render() {
+        console.log(this.props);
         if(isMobile){
             return (
             
@@ -439,6 +445,7 @@ class accountdetails extends Component {
                         </ul>
 
                         <div style={{ maxHeight: "800px", width: "100%", overflowY: "auto", justifyContent: "center", display: "flex" }}>
+                        
                             <Route exact path="/Account/AccountDetails/AccountSettings" component={AccountSettings} />
                             <Route exact path="/Account/AccountDetails/" component={accounthome} />
                         </div>
@@ -447,8 +454,9 @@ class accountdetails extends Component {
                     
 
                         <div style={{ width: "100vw", paddingBottom:"10vh", overflowY: "auto", justifyContent: "center", display: "flex" }}>
+                            <AppliedRoute exact path="/Account/AccountDetails/Network" component={Network} props={this.props} />
                             <Route exact path="/Account/AccountDetails/AccountSettings" component={AccountSettings} />
-                            <Route exact path="/Account/AccountDetails/" component={accounthome} />
+                            <AppliedRoute exact path="/Account/AccountDetails/" component={accounthome} props={this.props} />
                         </div>
                         <ul className="account-menu-items">
                             <li id="home-link">
@@ -461,7 +469,14 @@ class accountdetails extends Component {
                                     <img className={"small"} src={home} />
                                 </Link>
                             </li>
-                            <li><img className={"disabled small"} src={network} /></li>
+                            <li><Link to={{
+                                    pathname: '/Account/AccountDetails/Network',
+                                    state: this.props.userDetails,
+                                    setUserDetails: this.props.setUserDetails
+                                }}>
+                                    <img className={"small"} src={network} />
+
+                                </Link></li>
                             <li id="settings-link" onClick={setViewing}>
 
                                 <Link to={{

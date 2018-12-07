@@ -25,7 +25,7 @@ class home extends Component {
             <div className="content-home">
                 <img src={gamap} className="ga-img" />
                 <div className="home-text"  >
-                    <h1>Welcome to Smash Atlanta.</h1>
+                    <h1>Welcome to<br/> Smash Atlanta.</h1>
                     <h2>Your premier source for finding players and tournaments near you.</h2>
                 </div>
                 <a className="join-now-link rainbow" onClick={() => this.props.history.push('/account')}>Join Now!</a>
